@@ -1,0 +1,245 @@
+/* ============================================================
+   RetrocubeX — Colors & Type foundations
+   Retro-arcade / synthwave aesthetic. Dark violet base,
+   neon mint primary, electric blue + lavender/magenta accents,
+   holographic pastel gradient for hero moments.
+   ============================================================ */
+
+/* ---------- FONTS ---------- */
+/* Funnel Display = brand font (provided). Press Start 2P = arcade
+   accent (LEVEL / SCORE / PRESS START). Space Mono = technical/spec.
+   Press Start 2P + Space Mono load from Google Fonts CDN. */
+@font-face {
+  font-family: "Funnel Display";
+  src: url("fonts/FunnelDisplay-Light.ttf") format("truetype");
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Funnel Display";
+  src: url("fonts/FunnelDisplay-Regular.ttf") format("truetype");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Funnel Display";
+  src: url("fonts/FunnelDisplay-Medium.ttf") format("truetype");
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Funnel Display";
+  src: url("fonts/FunnelDisplay-SemiBold.ttf") format("truetype");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Funnel Display";
+  src: url("fonts/FunnelDisplay-Bold.ttf") format("truetype");
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "Funnel Display";
+  src: url("fonts/FunnelDisplay-ExtraBold.ttf") format("truetype");
+  font-weight: 800; font-style: normal; font-display: swap;
+}
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap");
+
+:root {
+  /* ---------- CORE PALETTE ---------- */
+  /* Dark violet base — the "screen off" void */
+  --rcx-void:      #100B1C;   /* deepest bg */
+  --rcx-ink:       #181027;   /* primary surface / page bg */
+  --rcx-panel:     #20153A;   /* raised panel / card */
+  --rcx-panel-2:   #2B1D4D;   /* hover panel / inset */
+  --rcx-line:      #3A2A63;   /* hairline borders on dark */
+
+  /* Mint — PRIMARY neon. Two tones only. */
+  --rcx-mint:      #54EEC0;   /* core — fills, links, focus, success */
+  --rcx-mint-deep: #1F9C7C;   /* pressed + pixel-offset shadow. Hover = brighten core */
+
+  /* Blue — electric secondary */
+  --rcx-blue:      #4FA8FF;   /* core */
+  --rcx-cyan:      #57D8FF;   /* bright cyan glow (grids / foil) */
+  --rcx-blue-deep: #2D5FCC;   /* pressed */
+
+  /* Accent — ONE lavender accent + magenta reserved for urgency */
+  --rcx-violet:    #A98BFF;   /* THE accent — section marks, decoration, glow */
+  --rcx-magenta:   #FF6FC7;   /* urgency pop ONLY — sale / limited / alerts */
+
+  /* ---------- FOREGROUND ---------- */
+  --rcx-fg1:       #F4F0FF;   /* primary text on dark */
+  --rcx-fg2:       #BCAFE0;   /* secondary text */
+  --rcx-fg3:       #8478A8;   /* muted / captions */
+  --rcx-fg-on-mint:#0C2A22;   /* text on mint fills */
+  --rcx-fg-on-light:#1A1230;  /* text on light bg */
+
+  /* Light surface (rare — used for inverted cards / receipts) */
+  --rcx-paper:     #F3EFFA;
+  --rcx-paper-2:   #E7DEF6;
+
+  /* ---------- SEMANTIC ---------- */
+  --rcx-success:   #54EEC0;   /* = mint */
+  --rcx-info:      #4FA8FF;   /* = blue */
+  --rcx-warning:   #FFD3A1;   /* = peach */
+  --rcx-danger:    #FF6F7E;   /* arcade "game over" red */
+
+  /* ---------- HOLOGRAPHIC GRADIENT ---------- */
+  /* The sticker foil — mint → cyan → lavender → pink → peach */
+  --rcx-holo: linear-gradient(100deg,
+      #6FFFD6 0%, #57D8FF 26%, #A98BFF 52%, #FF8FD0 76%, #FFD3A1 100%);
+  /* Synthwave grid horizon */
+  --rcx-horizon: linear-gradient(180deg, #FF6FC7 0%, #A98BFF 55%, #4FA8FF 100%);
+  /* Subtle panel sheen */
+  --rcx-sheen: linear-gradient(160deg, rgba(255,255,255,.06), rgba(255,255,255,0));
+
+  /* ---------- TYPE FAMILIES ---------- */
+  --rcx-font-display: "Funnel Display", system-ui, sans-serif;
+  --rcx-font-body:    "Funnel Display", system-ui, sans-serif;
+  --rcx-font-arcade:  "Press Start 2P", "Funnel Display", monospace;
+  --rcx-font-mono:    "Space Mono", ui-monospace, monospace;
+
+  /* ---------- TYPE SCALE ---------- */
+  --rcx-text-xs:  12px;
+  --rcx-text-sm:  14px;
+  --rcx-text-base:16px;
+  --rcx-text-md:  18px;
+  --rcx-text-lg:  22px;
+  --rcx-text-xl:  28px;
+  --rcx-text-2xl: 38px;
+  --rcx-text-3xl: 52px;
+  --rcx-text-4xl: 72px;
+  --rcx-text-5xl: 104px;
+
+  /* ---------- SPACING (8pt base, arcade-tight rhythm) ---------- */
+  --rcx-space-1: 4px;
+  --rcx-space-2: 8px;
+  --rcx-space-3: 12px;
+  --rcx-space-4: 16px;
+  --rcx-space-5: 24px;
+  --rcx-space-6: 32px;
+  --rcx-space-7: 48px;
+  --rcx-space-8: 64px;
+  --rcx-space-9: 96px;
+
+  /* ---------- RADII ---------- */
+  /* Retro hardware = mostly tight corners; pills for arcade buttons. */
+  --rcx-radius-xs: 2px;
+  --rcx-radius-sm: 4px;
+  --rcx-radius-md: 8px;
+  --rcx-radius-lg: 14px;
+  --rcx-radius-pill: 999px;
+
+  /* ---------- BORDERS ---------- */
+  --rcx-border: 1.5px solid var(--rcx-line);
+  --rcx-border-mint: 1.5px solid var(--rcx-mint);
+
+  /* ---------- SHADOWS / GLOWS ---------- */
+  --rcx-shadow-card: 0 8px 28px -8px rgba(0,0,0,.6);
+  --rcx-shadow-pop:  0 18px 50px -12px rgba(0,0,0,.7);
+  --rcx-glow-mint:   0 0 0 1px rgba(84,238,192,.5), 0 0 24px -2px rgba(84,238,192,.55);
+  --rcx-glow-blue:   0 0 0 1px rgba(79,168,255,.5), 0 0 24px -2px rgba(79,168,255,.55);
+  --rcx-glow-magenta:0 0 0 1px rgba(255,111,199,.5), 0 0 24px -2px rgba(255,111,199,.55);
+  /* hard "pixel" offset shadow for buttons/cards */
+  --rcx-shadow-hard: 4px 4px 0 0 var(--rcx-mint-deep);
+
+  /* ---------- MOTION ---------- */
+  --rcx-ease: cubic-bezier(.2,.8,.2,1);
+  --rcx-ease-arcade: cubic-bezier(.34,1.56,.64,1); /* slight overshoot/bounce */
+  --rcx-dur-fast: 120ms;
+  --rcx-dur: 200ms;
+  --rcx-dur-slow: 360ms;
+}
+
+/* ============================================================
+   SEMANTIC TYPE CLASSES
+   ============================================================ */
+.rcx-display {
+  font-family: var(--rcx-font-display);
+  font-weight: 800;
+  font-size: var(--rcx-text-5xl);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--rcx-fg1);
+  text-transform: uppercase;
+}
+.rcx-h1 {
+  font-family: var(--rcx-font-display);
+  font-weight: 800;
+  font-size: var(--rcx-text-3xl);
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  color: var(--rcx-fg1);
+  text-transform: uppercase;
+}
+.rcx-h2 {
+  font-family: var(--rcx-font-display);
+  font-weight: 700;
+  font-size: var(--rcx-text-2xl);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--rcx-fg1);
+}
+.rcx-h3 {
+  font-family: var(--rcx-font-display);
+  font-weight: 600;
+  font-size: var(--rcx-text-xl);
+  line-height: 1.1;
+  color: var(--rcx-fg1);
+}
+.rcx-h4 {
+  font-family: var(--rcx-font-display);
+  font-weight: 600;
+  font-size: var(--rcx-text-lg);
+  line-height: 1.2;
+  color: var(--rcx-fg1);
+}
+.rcx-lead {
+  font-family: var(--rcx-font-body);
+  font-weight: 400;
+  font-size: var(--rcx-text-md);
+  line-height: 1.55;
+  color: var(--rcx-fg2);
+}
+.rcx-body {
+  font-family: var(--rcx-font-body);
+  font-weight: 400;
+  font-size: var(--rcx-text-base);
+  line-height: 1.6;
+  color: var(--rcx-fg2);
+}
+.rcx-small {
+  font-family: var(--rcx-font-body);
+  font-weight: 400;
+  font-size: var(--rcx-text-sm);
+  line-height: 1.5;
+  color: var(--rcx-fg3);
+}
+/* Arcade label — uppercase pixel font, generous tracking, small sizes only */
+.rcx-arcade {
+  font-family: var(--rcx-font-arcade);
+  font-size: var(--rcx-text-xs);
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--rcx-mint);
+  text-transform: uppercase;
+}
+/* Eyebrow / kicker — mono, tracked-out, uppercase */
+.rcx-eyebrow {
+  font-family: var(--rcx-font-mono);
+  font-weight: 700;
+  font-size: var(--rcx-text-xs);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rcx-mint);
+}
+.rcx-mono {
+  font-family: var(--rcx-font-mono);
+  font-size: var(--rcx-text-sm);
+  line-height: 1.5;
+  color: var(--rcx-fg2);
+}
+
+/* Holographic text fill */
+.rcx-holo-text {
+  background: var(--rcx-holo);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
