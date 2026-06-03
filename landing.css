@@ -431,3 +431,16 @@
   .hd-nav { display: none; }
   .ig-grid { grid-template-columns: repeat(3, 1fr); }
 }
+
+/* ---------- MOBILE MARGINS ---------- */
+@media (max-width: 600px) {
+  .wrap { padding-left: 20px; padding-right: 20px; }
+  .hero-centered,
+  .hero-split,
+  .hero-marquee { padding-left: 20px; padding-right: 20px; }
+  .customband.wrap { padding-left: 0; padding-right: 0; }
+  .customband-inner { margin-left: 20px; margin-right: 20px; }
+  .ft-simple-grid { grid-template-columns: 1fr; text-align: center; gap: 20px; }
+  .ft-social-row { justify-content: center; }
+  .ft-backtotop-wrap { justify-content: center; }
+}
