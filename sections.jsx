@@ -39,7 +39,9 @@ function LProductCard({ p, onAdd }) {
       <div className="top">
         {p.badge && <Badge kind={p.badge}>{p.badge === "sale" ? "-25%" : "Nuevo"}</Badge>}
         {out && <span className="badge badge-out" style={{ position: "absolute", top: 12, left: 12, zIndex: 2 }}>Game Over</span>}
-        <CubeScene hue={p.hue} size={104} scene={p.scene} />
+        {p.img
+          ? <img src={p.img} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
+          : <CubeScene hue={p.hue} size={104} scene={p.scene} />}
       </div>
       <div className="body">
         <h3 className="rcx-h4" style={{ fontSize: 18 }}>{p.name}</h3>
@@ -95,10 +97,7 @@ const C3D_COLORS = [
 function Carousel3D() {
   const { useState, useEffect, useRef } = React;
 
-  const items = carouselImages.map((src, i) => ({
-    src,
-    title: `Cubo #${i + 1}`,
-  }));
+  const items = carouselImages;
 
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -204,7 +203,7 @@ function HowMade() {
       <div className="howmade">
         <div className="howmade-visual reveal">
           <img
-            src="assets/images/WhatsApp Image 2026-06-03 at 19.32.47 (1).jpeg"
+            src="assets/Images/duck-hunt-making-2.jpeg"
             alt="Montaje a mano de un cubo RetrocubeX"
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           />
