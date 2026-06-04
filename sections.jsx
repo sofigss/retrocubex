@@ -227,7 +227,7 @@ function HowMade() {
             alt="Montaje a mano de un cubo RetrocubeX"
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
           />
-          <span className="tag"><Icon name="Hammer" size={14} color="var(--rcx-mint)" /> Montaje a mano · acrílico + LED</span>
+          <span className="tag"><Icon name="Hammer" size={14} color="var(--rcx-mint)" /> Montaje a mano · impresión en papel de primera calidad</span>
         </div>
         <div className="reveal reveal-d1">
           <span className="rcx-eyebrow">Hecho a mano</span>

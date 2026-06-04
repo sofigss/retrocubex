@@ -444,18 +444,20 @@
 .hscroll-btn   { display: none; }
 
 @media (max-width: 768px) {
-  .hscroll-outer { display: flex; align-items: center; gap: 8px; }
+  /* Arrows are absolute — they don't eat into the track width */
+  .hscroll-outer { position: relative; }
+
   .hscroll-track {
-    flex: 1;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 4px 2px 14px;
+    padding: 4px 0 16px;
+    /* leave room so first/last cards aren't under the arrows */
+    scroll-padding-inline: 4px;
   }
   .hscroll-track::-webkit-scrollbar { display: none; }
 
-  /* grids become flex rows inside the track */
   .hscroll-track .featured-grid,
   .hscroll-track .reviews-grid {
     display: flex;
@@ -463,36 +465,41 @@
     gap: 14px;
   }
 
-  /* featured: the reveal-wrapper div = one card slot */
+  /* Cards fill ~80 % of the visible viewport; the remaining 20 % shows the next card */
   .hscroll-track .featured-grid > div {
-    flex: 0 0 72vw;
-    max-width: 280px;
+    flex: 0 0 80vw;
+    max-width: 310px;
     scroll-snap-align: start;
   }
-
-  /* reviews: review-card = one card slot */
   .hscroll-track .reviews-grid > .review-card {
-    flex: 0 0 78vw;
-    max-width: 300px;
+    flex: 0 0 82vw;
+    max-width: 320px;
     scroll-snap-align: start;
   }
 
+  /* Arrows float over the content — no impact on layout */
   .hscroll-btn {
     display: flex;
-    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 30px;
+    height: 30px;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
-    background: var(--rcx-panel);
+    background: rgba(16, 11, 28, 0.82);
+    backdrop-filter: blur(6px);
     border: 1.5px solid var(--rcx-line);
     border-radius: 50%;
     color: var(--rcx-fg1);
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0,0,0,.45);
+    box-shadow: 0 2px 10px rgba(0,0,0,.5);
     transition: border-color .15s, color .15s;
   }
   .hscroll-btn:hover { border-color: var(--rcx-mint); color: var(--rcx-mint); }
+  .hscroll-btn--prev { left: 2px; }
+  .hscroll-btn--next { right: 2px; }
 }
 
 /* ---------- ACCENT-TWEAK FIX ----------
@@ -533,11 +540,14 @@
     -webkit-backdrop-filter: blur(14px);
     border-top: 1px solid var(--rcx-line);
     justify-content: center;
-    transform: translateY(110%);
-    transition: transform .38s var(--rcx-ease);
+    /* opacity-based show/hide — fiable en Safari iOS */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .32s var(--rcx-ease);
   }
   .mobile-sticky-cta--in {
-    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
   }
   .mobile-sticky-btn {
     display: flex;

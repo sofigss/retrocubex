@@ -72,16 +72,16 @@ function HScrollWrap({ children }) {
   const ref = React.useRef(null);
   const scroll = (dir) => {
     if (!ref.current) return;
-    ref.current.scrollBy({ left: dir * (ref.current.offsetWidth * 0.85), behavior: "smooth" });
+    ref.current.scrollBy({ left: dir * (ref.current.offsetWidth * 0.88), behavior: "smooth" });
   };
   return (
     <div className="hscroll-outer">
-      <button className="hscroll-btn hscroll-btn--prev" onClick={() => scroll(-1)} aria-label="Anterior">
-        <Icon name="ChevronLeft" size={16} />
-      </button>
       <div ref={ref} className="hscroll-track">
         {children}
       </div>
+      <button className="hscroll-btn hscroll-btn--prev" onClick={() => scroll(-1)} aria-label="Anterior">
+        <Icon name="ChevronLeft" size={16} />
+      </button>
       <button className="hscroll-btn hscroll-btn--next" onClick={() => scroll(1)} aria-label="Siguiente">
         <Icon name="ChevronRight" size={16} />
       </button>
