@@ -7,7 +7,7 @@ function PressStart({ children = "▸ PRESS START" }) {
 function TrustBadges() {
   return (
     <div className="hero-trust">
-      {[["Package", "Envío 24-48h"], ["Hand", "Hecho a mano"], ["Zap", "Calidad premium"], ["ShieldCheck", "Edición numerada"]].map(([ic, txt]) => (
+      {[["Package", "Envío 24-48h"], ["Hand", "Hecho a mano"], ["Diamond", "Calidad premium"], ["ShieldCheck", "Edición numerada"]].map(([ic, txt]) => (
         <span key={txt}><Icon name={ic} size={15} color="var(--rcx-mint)" /> {txt}</span>
       ))}
     </div>
@@ -17,8 +17,8 @@ function TrustBadges() {
 function HeroCTAs({ t, align }) {
   return (
     <div className="hero-cta-row" style={align === "left" ? { justifyContent: "flex-start" } : null}>
-      <a href="mailto:retrocubex@gmail.com" className="btn btn-primary pulse">
-        <Icon name="Wand2" size={17} />{t.ctaPrimary}
+      <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary pulse">
+        {t.ctaPrimary}
       </a>
     </div>
   );

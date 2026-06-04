@@ -2,7 +2,6 @@
 
 const WALLAPOP_URL = "https://es.wallapop.com/app/search?keywords=retrocubex";
 const VINTED_URL   = "https://www.vinted.es/";
-const MAILTO       = "mailto:retrocubex@gmail.com";
 
 /* ---------- NAV ---------- */
 function Nav() {
@@ -19,11 +18,11 @@ function Nav() {
           <a href="#top"><Logo height={32} className="hd-logo" /></a>
         </div>
         <div className="hd-right">
-          <a href={MAILTO} className="btn btn-primary hd-cta">
-            <Icon name="Wand2" size={16} />Pide tu cubo
+          <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary hd-cta">
+            Pide tu cubo
           </a>
           <a href={WALLAPOP_URL} target="_blank" rel="noopener noreferrer" className="btn btn-ghost hd-cta">
-            <Icon name="ShoppingBag" size={16} />Nuestra tienda
+            Nuestra tienda
           </a>
         </div>
       </div>
@@ -65,7 +64,19 @@ function LProductCard({ p, onAdd }) {
   );
 }
 
+const FEATURED_INITIAL = 4;
+
 function Featured({ onAdd }) {
+  const [showAll, setShowAll] = React.useState(false);
+  const visible = showAll ? L_PRODUCTS : L_PRODUCTS.slice(0, FEATURED_INITIAL);
+
+  React.useEffect(() => {
+    if (!showAll) return;
+    requestAnimationFrame(() => {
+      document.querySelectorAll("#catalogo .reveal:not(.in)").forEach(el => el.classList.add("in"));
+    });
+  }, [showAll]);
+
   return (
     <section id="catalogo" className="section wrap sec-pad">
       <div className="sec-head reveal">
@@ -74,13 +85,22 @@ function Featured({ onAdd }) {
           <h2 className="rcx-h1 sec-title">Cubos destacados</h2>
         </div>
       </div>
-      <div className="featured-grid">
-        {L_PRODUCTS.map((p, i) => (
-          <div className={"reveal reveal-d" + ((i % 3) + 1)} key={p.id}>
-            <LProductCard p={p} onAdd={onAdd} />
-          </div>
-        ))}
-      </div>
+      <HScrollWrap>
+        <div className="featured-grid">
+          {visible.map((p, i) => (
+            <div className={"reveal reveal-d" + ((i % 3) + 1)} key={p.id}>
+              <LProductCard p={p} onAdd={onAdd} />
+            </div>
+          ))}
+        </div>
+      </HScrollWrap>
+      {!showAll && (
+        <div className="load-more-wrap">
+          <button className="btn btn-ghost" onClick={() => setShowAll(true)}>
+            Cargar más ({L_PRODUCTS.length - FEATURED_INITIAL} cubos)
+          </button>
+        </div>
+      )}
     </section>
   );
 }
@@ -154,8 +174,8 @@ function Carousel3D() {
           <span className="rcx-eyebrow">Catálogo</span>
           <h2 className="rcx-h1 sec-title">Todos nuestros cubos</h2>
         </div>
-        <a href={MAILTO} className="btn btn-ghost">
-          <Icon name="Wand2" size={17} />Pide el tuyo
+        <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+          Pide el tuyo
         </a>
       </div>
 
@@ -243,9 +263,12 @@ function CustomBand() {
         <p className="rcx-lead" style={{ maxWidth: 500, textAlign: "center", margin: "0 auto" }}>
           Pide tu cubo <b style={{ color: "var(--rcx-fg1)" }}>100% personalizado</b>. Tu juego, tu peli, tu momento favorito — lo recreamos en píxel y lo llevamos a la realidad. Una pieza, tuya para siempre.
         </p>
-        <a href={MAILTO} className="btn btn-primary pulse" style={{ fontSize: 16, padding: "16px 32px", marginTop: 32, justifySelf: "center", width: "fit-content" }}>
-          <Icon name="Wand2" size={18} />Pide tu cubo personalizado
+        <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary pulse" style={{ fontSize: 16, padding: "16px 32px", marginTop: 32, justifySelf: "center", width: "fit-content" }}>
+          Pide tu cubo personalizado
         </a>
+        <p className="alt-contact">
+          o escríbenos a <a href={MAILTO} className="alt-contact-link">retrocubex@gmail.com</a>
+        </p>
       </div>
     </section>
   );
@@ -260,10 +283,10 @@ function Reviews() {
     <section id="opiniones" className="section wrap sec-pad">
       <div className="reveal" style={{ marginBottom: 28 }}>
         <span className="rcx-eyebrow">High scores</span>
-        <h2 className="rcx-h1 sec-title">Lo que dice player&nbsp;2</h2>
+        <h2 className="rcx-h1 sec-title">Lo que dicen de nosotras</h2>
       </div>
       <div className="score-strip reveal">
-        {[["4,9", "sobre 5 estrellas"], ["1.200+", "cubos enviados"], ["98%", "lo recomiendan"]].map(([num, lbl]) => (
+        {[["4,9", "sobre 5 estrellas"], ["98%", "lo recomiendan"], ["95%", "clientes satisfechos"], ["100%", "mejora de decoración retro"]].map(([num, lbl]) => (
           <div key={lbl} style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <span className="num">{num}</span>
             <span className="rcx-small" style={{ maxWidth: 110, lineHeight: 1.4 }}>{lbl}</span>
@@ -271,7 +294,8 @@ function Reviews() {
         ))}
         <span className="stars" style={{ fontSize: 20 }}>★★★★★</span>
       </div>
-      <div className="reviews-grid">
+      <HScrollWrap>
+        <div className="reviews-grid">
         {L_REVIEWS.map((r, i) => (
           <div className={"review-card reveal reveal-d" + ((i % 3) + 1)} key={r.who}>
             <Stars n={r.stars} />
@@ -285,7 +309,8 @@ function Reviews() {
             </div>
           </div>
         ))}
-      </div>
+        </div>
+      </HScrollWrap>
     </section>
   );
 }
@@ -300,7 +325,7 @@ function Instagram() {
           <h2 className="rcx-h1 sec-title">En tu feed</h2>
         </div>
         <a href="https://instagram.com/retrocubex" target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
-          <Icon name="Instagram" size={17} />Síguenos
+          Síguenos
         </a>
       </div>
       <behold-widget feed-id="7WQBzwX9wYfDCE2dflBH"></behold-widget>
@@ -346,10 +371,10 @@ function FooterL() {
               <Icon name="Instagram" size={15} />Instagram
             </a>
             <a href={WALLAPOP_URL} target="_blank" rel="noopener noreferrer" className="ft-link">
-              <Icon name="ShoppingBag" size={15} />Wallapop
+              <img src="assets/Images/wallapop.png" alt="Wallapop" className="ft-brand-icon" />Wallapop
             </a>
             <a href={VINTED_URL} target="_blank" rel="noopener noreferrer" className="ft-link">
-              <Icon name="Tag" size={15} />Vinted
+              <img src="assets/Images/vinted.png" alt="Vinted" className="ft-brand-icon ft-brand-icon--vinted" />Vinted
             </a>
           </div>
           <div className="ft-simple-brand">
@@ -369,4 +394,15 @@ function FooterL() {
   );
 }
 
-Object.assign(window, { Nav, Featured, LProductCard, Carousel3D, HowMade, CustomBand, Reviews, Instagram, Newsletter, FooterL, Stars });
+/* ---------- MOBILE STICKY CTA ---------- */
+function MobileStickyFooter() {
+  return (
+    <div className="mobile-sticky-cta">
+      <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary pulse mobile-sticky-btn">
+        Pide tu cubo
+      </a>
+    </div>
+  );
+}
+
+Object.assign(window, { Nav, Featured, LProductCard, Carousel3D, HowMade, CustomBand, Reviews, Instagram, Newsletter, FooterL, Stars, MobileStickyFooter });

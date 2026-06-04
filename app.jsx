@@ -7,7 +7,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "anim": "full",
   "heroLine1": "Revive",
   "heroLine2": "el píxel",
-  "heroSub": "Cubos diorama de tus videojuegos y pelis favoritas, montados a mano y con luz LED integrada. Edición limitada — cuando se agota, <b style=\"color:var(--rcx-magenta)\">GAME OVER</b>.",
+  "heroSub": "Cubos diorama de tus videojuegos y pelis favoritas, montados a mano y hechos con cariño. Edición limitada <b style=\"color:var(--rcx-magenta)\">¡Consigue el tuyo!</b>.",
   "ctaPrimary": "Pide tu cubo",
   "showFeatured": true,
   "showCarousel": true,
@@ -105,6 +105,7 @@ function App() {
       {t.showCustom    && <CustomBand />}
 
       <FooterL />
+      <MobileStickyFooter />
 
       <div className={"toast" + (toast ? " on" : "")}>{toast}</div>
 

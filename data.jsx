@@ -1,5 +1,8 @@
 /* data.jsx — content for the RetrocubeX landing page (Spanish, arcade voice) */
 
+const TYPEFORM_URL = "https://form.typeform.com/to/jfG8fxxO";
+const MAILTO       = "mailto:retrocubex@gmail.com";
+
 const L_PRODUCTS = [
   { id: "rcx-001", name: "Zelda: The Minish Cap", cat: "Videojuegos", price: "22,50", old: null,
     img: "assets/Images/zelda-minish-cap-diorama-frontal.jpeg", hue: 150, stock: 1, badge: "new", limited: true, scene: "portal" },
@@ -17,15 +20,21 @@ const L_PRODUCTS = [
     img: "assets/Images/crazy-taxi-diorama-lateral.jpeg", hue: 50, stock: 3, badge: null, limited: false, scene: "kart" },
   { id: "rcx-008", name: "Duck Hunt", cat: "Videojuegos", price: "22,50", old: null,
     img: "assets/Images/duck-hunt-diorama.jpeg", hue: 100, stock: 2, badge: null, limited: false, scene: "arcade" },
+  { id: "rcx-009", name: "Kirby: Nightmare in Dream Land", cat: "Videojuegos", price: "22,50", old: null,
+    img: "assets/Images/kirby-nightmare-diorama-frontal.jpeg", hue: 330, stock: 1, badge: null, limited: false, scene: "dungeon" },
+  { id: "rcx-010", name: "Oddworld: Abe's Oddysee", cat: "Videojuegos", price: "22,50", old: null,
+    img: "assets/Images/oddworld-diorama-frontal.jpeg", hue: 90, stock: 1, badge: null, limited: false, scene: "dungeon" },
+  { id: "rcx-011", name: "Alien 3", cat: "Películas", price: "22,50", old: null,
+    img: "assets/Images/alien3-diorama-frontal.jpeg", hue: 180, stock: 1, badge: null, limited: false, scene: "ship" },
+  { id: "rcx-012", name: "Super Mario Galaxy", cat: "Videojuegos", price: "22,50", old: null,
+    img: "assets/Images/super-mario-galaxy-diorama-frontal.jpeg", hue: 200, stock: 1, badge: null, limited: false, scene: "portal" },
 ];
 
 const L_REVIEWS = [
-  { who: "Marcos R.", stars: 5, text: "Brutal. Más detalle del que esperaba y la luz LED queda perfecta de noche en la estantería." },
+  { who: "Raúl F.", stars: 5, text: "El cubo se ve increíble, han sabido reflejar un momento crucial de la película, los detalles son magníficos!, repetiré." },
   { who: "Lucía P.", stars: 5, text: "Llegó en 48h y súper protegido. En cuanto lo enchufé volví directa a los 90. Ya quiero el siguiente drop." },
   { who: "Dani G.", stars: 5, text: "Pedí uno personalizado de mi arcade favorita y clavaron cada píxel. Atención al detalle de otro nivel." },
   { who: "Sara M.", stars: 5, text: "Es el regalo geek perfecto. Mi pareja flipó. La caja ya es una experiencia: insert coin to continue." },
-  { who: "Nacho V.", stars: 4, text: "Calidad top y muy bien embalado. Solo le pongo pega a que se agotan demasiado rápido, ¡avisad antes!" },
-  { who: "Ainhoa L.", stars: 5, text: "Tengo ya tres cubos haciendo combo en el salón. Adictivo total. La edición limitada vale cada euro." },
 ];
 
 /* Instagram tiles — placeholder diorama scenes (swap for real photos) */
