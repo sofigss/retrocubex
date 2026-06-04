@@ -76,22 +76,14 @@ function LProductCard({ p, onAdd }) {
 const FEATURED_INITIAL = 5;
 
 function Featured({ onAdd }) {
-  const [showAll, setShowAll] = React.useState(false);
-  const visible = showAll ? L_PRODUCTS : L_PRODUCTS.slice(0, FEATURED_INITIAL);
-
-  React.useEffect(() => {
-    if (!showAll) return;
-    requestAnimationFrame(() => {
-      document.querySelectorAll("#catalogo .reveal:not(.in)").forEach(el => el.classList.add("in"));
-    });
-  }, [showAll]);
+  const visible = L_PRODUCTS;
 
   return (
     <section id="catalogo" className="section wrap sec-pad">
       <div className="sec-head reveal">
         <div>
-          <span className="rcx-eyebrow">Lo más jugado</span>
-          <h2 className="rcx-h1 sec-title">Cubos destacados</h2>
+          <span className="rcx-eyebrow">Galería</span>
+          <h2 className="rcx-h1 sec-title">Entra al mundo RetrocubeX</h2>
         </div>
       </div>
       <HScrollWrap>
@@ -103,13 +95,6 @@ function Featured({ onAdd }) {
           ))}
         </div>
       </HScrollWrap>
-      {!showAll && (
-        <div className="load-more-wrap">
-          <button className="btn btn-ghost" onClick={() => setShowAll(true)}>
-            Cargar más ({L_PRODUCTS.length - FEATURED_INITIAL} cubos)
-          </button>
-        </div>
-      )}
     </section>
   );
 }
