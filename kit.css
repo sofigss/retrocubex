@@ -24,6 +24,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
   opacity:.35;mix-blend-mode:multiply;
 }
 .wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+@media(min-width:601px)and(max-width:1199px){.wrap{padding-left:40px;padding-right:40px}}
 
 /* ---------- HEADER ---------- */
 .hd{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);

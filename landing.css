@@ -81,9 +81,48 @@
 .hd-cta { font-size: 13px; padding: 10px 18px; font-family: "Funnel Display", system-ui, sans-serif; }
 .hd-link { font-family: "Funnel Display", system-ui, sans-serif; font-size: 14px; letter-spacing: .01em; text-transform: none; }
 
+/* Hamburger button — hidden on desktop */
+.hd-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  color: var(--rcx-fg1);
+  padding: 6px;
+  border-radius: 6px;
+  transition: color .15s var(--rcx-ease);
+}
+.hd-hamburger:hover { color: var(--rcx-mint); }
+
+/* Mobile menu dropdown */
+.hd-mob-menu {
+  display: flex;
+  flex-direction: column;
+  background: var(--rcx-panel);
+  border-top: 1px solid var(--rcx-line);
+  border-bottom: 1px solid var(--rcx-line);
+  padding: 8px 20px 16px;
+}
+.hd-mob-link {
+  font-family: "Funnel Display", system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--rcx-fg1);
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rcx-line);
+  transition: color .15s var(--rcx-ease);
+}
+.hd-mob-link:last-child { border-bottom: none; }
+.hd-mob-link:hover { color: var(--rcx-mint); }
+
 @media (max-width: 900px) {
   .hd-left { display: none; }
   .hd-v2 { grid-template-columns: 1fr auto; }
+  .hd-hamburger { display: flex; }
+}
+@media (min-width: 901px) {
+  .hd-mob-menu { display: none !important; }
 }
 @media (max-width: 520px) {
   .hd-right .btn-ghost { display: none; }
@@ -91,7 +130,7 @@
 
 /* ---------- CAROUSEL 3D ---------- */
 #carousel {
-  overflow: visible;
+  overflow-x: clip;
 }
 
 .c3d-stage {
@@ -105,6 +144,7 @@
   overflow: visible;
   margin-left: calc(-50vw + 50%);
   width: 100vw;
+  max-width: 100vw;
   background: var(--c3d-bg, transparent), var(--rcx-ink);
   transition: background 0.7s var(--rcx-ease);
   cursor: grab;
@@ -441,20 +481,16 @@
 
 /* ---------- HORIZONTAL SCROLL (mobile) ---------- */
 .hscroll-outer { position: relative; }
-.hscroll-btn   { display: none; }
+.hscroll-btn { display: none; }
+.hscroll-controls { display: none; }
 
 @media (max-width: 768px) {
-  /* Arrows are absolute — they don't eat into the track width */
-  .hscroll-outer { position: relative; }
-
   .hscroll-track {
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    padding: 4px 0 16px;
-    /* leave room so first/last cards aren't under the arrows */
-    scroll-padding-inline: 4px;
+    padding: 4px 0 8px;
   }
   .hscroll-track::-webkit-scrollbar { display: none; }
 
@@ -465,7 +501,6 @@
     gap: 14px;
   }
 
-  /* Cards fill ~80 % of the visible viewport; the remaining 20 % shows the next card */
   .hscroll-track .featured-grid > div {
     flex: 0 0 80vw;
     max-width: 310px;
@@ -477,15 +512,17 @@
     scroll-snap-align: start;
   }
 
-  /* Arrows float over the content — no impact on layout */
+  /* Arrows row below the track */
+  .hscroll-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 16px;
+  }
   .hscroll-btn {
     display: flex;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 10;
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     align-items: center;
     justify-content: center;
     background: rgba(16, 11, 28, 0.82);
@@ -498,8 +535,6 @@
     transition: border-color .15s, color .15s;
   }
   .hscroll-btn:hover { border-color: var(--rcx-mint); color: var(--rcx-mint); }
-  .hscroll-btn--prev { left: 2px; }
-  .hscroll-btn--next { right: 2px; }
 }
 
 /* ---------- ACCENT-TWEAK FIX ----------

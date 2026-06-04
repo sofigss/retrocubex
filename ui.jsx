@@ -79,12 +79,14 @@ function HScrollWrap({ children }) {
       <div ref={ref} className="hscroll-track">
         {children}
       </div>
-      <button className="hscroll-btn hscroll-btn--prev" onClick={() => scroll(-1)} aria-label="Anterior">
-        <Icon name="ChevronLeft" size={16} />
-      </button>
-      <button className="hscroll-btn hscroll-btn--next" onClick={() => scroll(1)} aria-label="Siguiente">
-        <Icon name="ChevronRight" size={16} />
-      </button>
+      <div className="hscroll-controls">
+        <button className="hscroll-btn hscroll-btn--prev" onClick={() => scroll(-1)} aria-label="Anterior">
+          <Icon name="ChevronLeft" size={18} />
+        </button>
+        <button className="hscroll-btn hscroll-btn--next" onClick={() => scroll(1)} aria-label="Siguiente">
+          <Icon name="ChevronRight" size={18} />
+        </button>
+      </div>
     </div>
   );
 }

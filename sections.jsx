@@ -5,6 +5,7 @@ const VINTED_URL   = "https://www.vinted.es/";
 
 /* ---------- NAV ---------- */
 function Nav() {
+  const [menuOpen, setMenuOpen] = React.useState(false);
   const links = [["catalogo", "Catálogo"], ["personaliza", "Personaliza"], ["hecho-a-mano", "Cómo se hace"], ["opiniones", "Opiniones"]];
   return (
     <header className="hd" id="site-header">
@@ -18,6 +19,9 @@ function Nav() {
           <a href="#top"><Logo height={32} className="hd-logo" /></a>
         </div>
         <div className="hd-right">
+          <button className="hd-hamburger" onClick={() => setMenuOpen(o => !o)} aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}>
+            <Icon name={menuOpen ? "X" : "Menu"} size={22} />
+          </button>
           <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary hd-cta">
             Pide tu cubo
           </a>
@@ -26,6 +30,13 @@ function Nav() {
           </a>
         </div>
       </div>
+      {menuOpen && (
+        <nav className="hd-mob-menu">
+          {links.map(([id, label]) => (
+            <a key={id} className="hd-mob-link" href={"#" + id} onClick={() => setMenuOpen(false)}>{label}</a>
+          ))}
+        </nav>
+      )}
     </header>
   );
 }
