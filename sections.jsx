@@ -396,8 +396,16 @@ function FooterL() {
 
 /* ---------- MOBILE STICKY CTA ---------- */
 function MobileStickyFooter() {
+  const [visible, setVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => setVisible(window.scrollY > 350);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <div className="mobile-sticky-cta">
+    <div className={"mobile-sticky-cta" + (visible ? " mobile-sticky-cta--in" : "")}>
       <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary pulse mobile-sticky-btn">
         Pide tu cubo
       </a>

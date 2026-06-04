@@ -533,6 +533,11 @@
     -webkit-backdrop-filter: blur(14px);
     border-top: 1px solid var(--rcx-line);
     justify-content: center;
+    transform: translateY(110%);
+    transition: transform .38s var(--rcx-ease);
+  }
+  .mobile-sticky-cta--in {
+    transform: translateY(0);
   }
   .mobile-sticky-btn {
     display: flex;
