@@ -458,6 +458,8 @@
 
 .score-strip { display: flex; flex-wrap: wrap; gap: 40px; align-items: center; margin-bottom: 34px; }
 .score-strip .num { font-family: var(--rcx-font-display); font-weight: 800; font-size: 44px; color: var(--rcx-mint); line-height: 1; }
+.score-item { display: flex; align-items: center; gap: 12px; }
+.score-lbl { max-width: 110px; line-height: 1.4; }
 
 /* ---------- INSTAGRAM ---------- */
 .ig-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
@@ -511,6 +513,46 @@
     max-width: 320px;
     scroll-snap-align: start;
   }
+
+  /* Reviews: columna vertical en mobile (solo 4, no necesita carrusel) */
+  #opiniones .hscroll-track {
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding: 0;
+  }
+  #opiniones .hscroll-track .reviews-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    flex: none;
+  }
+  #opiniones .hscroll-track .reviews-grid > .review-card {
+    flex: none;
+    max-width: none;
+    width: 100%;
+    scroll-snap-align: none;
+  }
+  #opiniones .hscroll-controls { display: none; }
+
+  /* Featured (cubos destacados): lista vertical en mobile, sin carrusel */
+  #catalogo .hscroll-track {
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding: 0;
+  }
+  #catalogo .hscroll-track .featured-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    flex: none;
+  }
+  #catalogo .hscroll-track .featured-grid > div {
+    flex: none;
+    max-width: none;
+    width: 100%;
+    scroll-snap-align: none;
+  }
+  #catalogo .hscroll-controls { display: none; }
 
   /* Arrows row below the track */
   .hscroll-controls {
@@ -612,9 +654,15 @@
   .sec-pad { padding-top: 56px; }
   .customband { margin-top: 56px; }
 
-  /* Score strip: compact for 4 KPIs */
-  .score-strip { gap: 16px 22px; }
-  .score-strip .num { font-size: 32px; }
+  /* sec-head: heading + CTA en columna para evitar colisión */
+  .sec-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+
+  /* Score strip: número encima, label debajo */
+  .score-strip { gap: 20px 28px; }
+  .score-strip .num { font-size: 36px; }
+  .score-item { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .score-lbl { max-width: none; font-size: 13px; }
+  .score-stars { width: 100%; }
 }
 
 /* Toast must appear above the sticky footer on mobile */

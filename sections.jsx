@@ -61,9 +61,7 @@ function LProductCard({ p, onAdd }) {
             {p.old && <span className="price old">{p.old} €</span>}
             <span className="price">{p.price} €</span>
           </span>
-          {out
-            ? <span className="stock" style={{ color: "var(--rcx-danger)" }}>Agotado</span>
-            : <span className="stock">x{p.stock} stock</span>}
+          {out && <span className="stock" style={{ color: "var(--rcx-danger)" }}>Agotado</span>}
         </div>
         <Button variant={out ? "dark" : "primary"} className="btn-block" disabled={out}
           style={{ marginTop: 14, fontSize: 13, padding: "11px 18px" }} icon={out ? null : "Plus"}
@@ -75,7 +73,7 @@ function LProductCard({ p, onAdd }) {
   );
 }
 
-const FEATURED_INITIAL = 4;
+const FEATURED_INITIAL = 5;
 
 function Featured({ onAdd }) {
   const [showAll, setShowAll] = React.useState(false);
@@ -298,12 +296,12 @@ function Reviews() {
       </div>
       <div className="score-strip reveal">
         {[["4,9", "sobre 5 estrellas"], ["98%", "lo recomiendan"], ["95%", "clientes satisfechos"], ["100%", "mejora de decoración retro"]].map(([num, lbl]) => (
-          <div key={lbl} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div key={lbl} className="score-item">
             <span className="num">{num}</span>
-            <span className="rcx-small" style={{ maxWidth: 110, lineHeight: 1.4 }}>{lbl}</span>
+            <span className="rcx-small score-lbl">{lbl}</span>
           </div>
         ))}
-        <span className="stars" style={{ fontSize: 20 }}>★★★★★</span>
+        <span className="stars score-stars" style={{ fontSize: 20 }}>★★★★★</span>
       </div>
       <HScrollWrap>
         <div className="reviews-grid">
