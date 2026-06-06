@@ -345,6 +345,13 @@ function Featured({ onAdd }) {
   const visible = limited ? rest.slice(0, MOBILE_LIMIT) : rest;
   const hasMore = limited && rest.length > MOBILE_LIMIT;
 
+  React.useEffect(() => {
+    if (!showAll) return;
+    requestAnimationFrame(() => {
+      document.querySelectorAll("#catalogo .reveal:not(.in)").forEach(el => el.classList.add("in"));
+    });
+  }, [showAll]);
+
   return (
     <section id="catalogo" className="section wrap sec-pad">
       <div className="sec-head reveal">
@@ -674,7 +681,12 @@ function MobileStickyFooter() {
   const [visible, setVisible] = React.useState(false);
 
   React.useEffect(() => {
-    const onScroll = () => setVisible(window.scrollY > 350);
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setVisible(y > 350 && y > lastY);
+      lastY = y;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);

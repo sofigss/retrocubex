@@ -465,7 +465,7 @@
 @media (max-width: 880px) { .customband-inner { grid-template-columns: 1fr; gap: 28px; padding: 40px 28px; } }
 .customband-inner.customband-center {
   display: flex; flex-direction: column; align-items: center; text-align: center;
-  width: 100%; box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 /* ---------- REVIEWS ---------- */
@@ -488,6 +488,7 @@
 .score-lbl { max-width: 110px; line-height: 1.4; }
 
 /* ---------- INSTAGRAM ---------- */
+behold-widget { display: block; }
 .ig-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
 .ig-tile {
   position: relative; aspect-ratio: 1; border-radius: var(--rcx-radius-md); overflow: hidden;
