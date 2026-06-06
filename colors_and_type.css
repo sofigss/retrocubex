@@ -222,12 +222,12 @@
 }
 /* Eyebrow / kicker — mono, tracked-out, uppercase */
 .rcx-eyebrow {
-  font-family: var(--rcx-font-mono);
+  font-family: var(--rcx-font-display);
   font-weight: 700;
   font-size: var(--rcx-text-xs);
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--rcx-mint);
+  color: var(--rcx-violet);
 }
 .rcx-mono {
   font-family: var(--rcx-font-mono);

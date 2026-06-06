@@ -7,7 +7,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
   "anim": "full",
   "heroLine1": "Revive",
   "heroLine2": "el píxel",
-  "heroSub": "Cubos diorama de tus videojuegos y pelis favoritas, montados a mano y hechos con cariño. Edición limitada <b style=\"color:var(--rcx-magenta)\">¡Consigue el tuyo!</b>.",
+  "heroSub": "Cubos diorama de tus videojuegos y pelis favoritas, montados a mano y hechos con cariño. Edición limitada <b style=\"color:var(--rcx-violet)\">¡Consigue el tuyo!</b>.",
   "ctaPrimary": "Pide tu cubo",
   "showFeatured": true,
   "showCarousel": true,
@@ -96,14 +96,15 @@ function App() {
       <Nav />
       <Hero t={t} />
       {t.anim !== "off" && <MarqueeBand />}
+      <CoverflowArcade />
 
       {t.showFeatured  && <Featured onAdd={onAdd} />}
-      {t.showCarousel  && <Carousel3D />}
       {t.showHowMade   && <HowMade />}
       {t.showReviews   && <Reviews />}
       {t.showInstagram && <Instagram />}
-      {t.showCustom    && <CustomBand />}
 
+      <FAQ />
+      {t.showCustom    && <CustomBand />}
       <FooterL />
       <MobileStickyFooter />
 
@@ -131,8 +132,7 @@ function App() {
           onChange={(v) => setTweak("anim", v)} />
 
         <TweakSection label="Secciones" />
-        <TweakToggle label="Cubos destacados"  value={t.showFeatured}   onChange={(v) => setTweak("showFeatured", v)} />
-        <TweakToggle label="Carrusel 3D"       value={t.showCarousel}   onChange={(v) => setTweak("showCarousel", v)} />
+        <TweakToggle label="Catálogo completo"  value={t.showFeatured}   onChange={(v) => setTweak("showFeatured", v)} />
         <TweakToggle label="Cómo se hace"      value={t.showHowMade}    onChange={(v) => setTweak("showHowMade", v)} />
         <TweakToggle label="Opiniones"         value={t.showReviews}    onChange={(v) => setTweak("showReviews", v)} />
         <TweakToggle label="Instagram"         value={t.showInstagram}  onChange={(v) => setTweak("showInstagram", v)} />

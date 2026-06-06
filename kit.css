@@ -87,16 +87,21 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .cube-scene .star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.6}
 
 /* ---------- PRODUCT CARD ---------- */
-.pcard{background:var(--rcx-panel);border:1.5px solid var(--rcx-line);border-radius:14px;overflow:hidden;
-       transition:all .2s var(--rcx-ease);cursor:pointer;display:flex;flex-direction:column}
-.pcard:hover{transform:translateY(-5px);border-color:var(--rcx-mint);box-shadow:var(--rcx-glow-mint)}
-.pcard .top{height:200px;position:relative}
+.pcard{background:none;border:none;border-radius:0;overflow:visible;
+       cursor:pointer;display:flex;flex-direction:column;gap:21px}
+.pcard .top{aspect-ratio:1/1;position:relative;border-radius:8px;overflow:hidden;
+            transition:box-shadow .3s var(--rcx-ease)}
+.pcard .top:hover{box-shadow:0px 1px 2px 0px #54eec0,0px 2px 6px 2px #54eec0}
 .pcard .top .badge{position:absolute;top:12px;left:12px;z-index:2}
-.pcard .body{padding:16px 18px 20px;display:flex;flex-direction:column;gap:4px;flex:1}
-.pcard .price-row{display:flex;align-items:baseline;justify-content:space-between;margin-top:14px}
-.price{font-family:var(--rcx-font-display);font-weight:800;font-size:24px;color:var(--rcx-mint);white-space:nowrap}
-.price.old{font-size:15px;color:var(--rcx-fg3);text-decoration:line-through;font-weight:500;margin-right:8px}
+.pcard .body{padding:0 0 20px;display:flex;flex-direction:column;gap:4px;flex:1}
+.pcard-cat{font-family:var(--rcx-font-display);font-size:14px;color:var(--rcx-fg3);
+           text-transform:uppercase;letter-spacing:1.82px;line-height:1.5}
+.pcard .price-row{display:flex;align-items:baseline;justify-content:space-between;margin-top:22px}
+.pcard .price{font-family:var(--rcx-font-display);font-weight:500;font-size:18px;color:var(--rcx-fg1);white-space:nowrap}
+.pcard .price.old{font-size:14px;color:var(--rcx-fg3);text-decoration:line-through;font-weight:400;margin-right:8px}
 .stock{font-family:var(--rcx-font-mono);font-size:10px;color:var(--rcx-fg3)}
+/* Button: outline por defecto, relleno sólido al hacer hover en el propio botón */
+.pcard .btn-ghost:hover:not([disabled]){background:var(--rcx-mint);color:var(--rcx-fg-on-mint)}
 
 /* grids */
 .grid-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:22px}

@@ -41,60 +41,336 @@ function Nav() {
   );
 }
 
+/* ---------- COVERFLOW ARCADE (destacados) ---------- */
+const COVERFLOW_CUBES = [
+  { name: "Duck Hunt", cat: "Videojuego · 1984",
+    cover: "assets/Images/duck-hunt-diorama.jpeg",
+    shots: ["assets/Images/duck-hunt-diorama.jpeg", "assets/Images/duck-hunt-cartucho.jpeg"] },
+  { name: "Back to the Future", cat: "Película · 1985",
+    cover: "assets/Images/back-to-the-future-diorama-frontal.jpeg",
+    shots: ["assets/Images/back-to-the-future-diorama-frontal.jpeg", "assets/Images/back-to-the-future-diorama-lateral.jpeg", "assets/Images/back-to-the-future-caratula.jpeg"] },
+  { name: "Street Fighter II", cat: "Videojuego · 1991",
+    cover: "assets/Images/street-fighter-2-diorama-frontal.jpeg",
+    shots: ["assets/Images/street-fighter-2-diorama-frontal.jpeg", "assets/Images/street-fighter-2-diorama-lateral.jpeg", "assets/Images/street-fighter-2-diorama-angulo.jpeg", "assets/Images/street-fighter-2-caratula.jpeg"] },
+  { name: "Crazy Taxi", cat: "Videojuego · 1999",
+    cover: "assets/Images/crazy-taxi-diorama-angulo.jpeg",
+    shots: ["assets/Images/crazy-taxi-diorama-angulo.jpeg", "assets/Images/crazy-taxi-diorama-lateral.jpeg", "assets/Images/crazy-taxi-caratula.jpeg"] },
+  { name: "Zelda: The Minish Cap", cat: "Videojuego · 2004",
+    cover: "assets/Images/zelda-minish-cap-diorama-frontal.jpeg",
+    shots: ["assets/Images/zelda-minish-cap-diorama-frontal.jpeg", "assets/Images/zelda-minish-cap-diorama-lateral.jpeg", "assets/Images/zelda-minish-cap-caratula.jpeg"] },
+];
+
+function CoverflowArcade() {
+  const [active, setActive] = React.useState(2);
+  const [lb, setLb] = React.useState(null);
+  const dragRef = React.useRef({ down: false, startX: 0 });
+  const total = COVERFLOW_CUBES.length;
+
+  const go = React.useCallback((i) => setActive(((i % total) + total) % total), [total]);
+
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (lb) {
+        const shots = COVERFLOW_CUBES[lb.cubeIdx].shots;
+        if (e.key === "Escape") { setLb(null); return; }
+        if (e.key === "ArrowLeft")  setLb(l => ({ ...l, imgIdx: (l.imgIdx - 1 + shots.length) % shots.length }));
+        if (e.key === "ArrowRight") setLb(l => ({ ...l, imgIdx: (l.imgIdx + 1) % shots.length }));
+      } else {
+        if (e.key === "ArrowLeft")  go(active - 1);
+        if (e.key === "ArrowRight") go(active + 1);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [active, lb, go]);
+
+  React.useEffect(() => {
+    document.body.style.overflow = lb ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [lb]);
+
+  const getCardStyle = (offset) => {
+    const abs = Math.abs(offset);
+    if (abs === 0) return { transform: "translate(-50%,-50%) translateX(0%) rotateY(0deg) scale(1)", opacity: 1, zIndex: 20 };
+    if (abs >= 2)  return { transform: `translate(-50%,-50%) translateX(${(offset > 0 ? 1 : -1) * 76}%) rotateY(${(offset > 0 ? -1 : 1) * 40}deg) scale(0.66)`, opacity: 0, zIndex: 18, pointerEvents: "none" };
+    const dir = offset > 0 ? 1 : -1;
+    return { transform: `translate(-50%,-50%) translateX(${dir * 46}%) rotateY(${-dir * 40}deg) scale(0.8)`, opacity: 0.7, zIndex: 19, pointerEvents: "auto" };
+  };
+
+  const onTouchStart = (e) => { dragRef.current = { down: true, startX: e.touches[0].clientX }; };
+  const onTouchEnd   = (e) => {
+    if (!dragRef.current.down) return;
+    dragRef.current.down = false;
+    const dx = e.changedTouches[0].clientX - dragRef.current.startX;
+    if (Math.abs(dx) > 45) go(active + (dx < 0 ? 1 : -1));
+  };
+  const onMouseDown = (e) => { dragRef.current = { down: true, startX: e.clientX }; };
+  const onMouseUp   = (e) => {
+    if (!dragRef.current.down) return;
+    const dx = e.clientX - dragRef.current.startX;
+    dragRef.current.down = false;
+    if (Math.abs(dx) > 45) go(active + (dx < 0 ? 1 : -1));
+  };
+
+  const openLb  = (cubeIdx) => setLb({ cubeIdx, imgIdx: 0 });
+  const closeLb = () => setLb(null);
+  const lbGo    = (d) => setLb(l => {
+    const shots = COVERFLOW_CUBES[l.cubeIdx].shots;
+    return { ...l, imgIdx: (l.imgIdx + d + shots.length) % shots.length };
+  });
+
+  const ChevLeft  = () => React.createElement("svg", { width:22,height:22,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round" }, React.createElement("path",{d:"m15 18-6-6 6-6"}));
+  const ChevRight = () => React.createElement("svg", { width:22,height:22,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round" }, React.createElement("path",{d:"m9 18 6-6-6-6"}));
+  const XIcon     = () => React.createElement("svg", { width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round" }, React.createElement("path",{d:"M18 6 6 18M6 6l12 12"}));
+
+  const activeCube = lb ? COVERFLOW_CUBES[lb.cubeIdx] : null;
+  const singleShot = activeCube && activeCube.shots.length <= 1;
+
+  return (
+    <>
+      <section className="rcx-cf">
+        <div className="rcx-cf__grid" />
+        <div className="rcx-cf__head">
+          <div className="rcx-cf__eyebrow">★ Destacados ★</div>
+          <h2 className="rcx-cf__title">Selecciona tu cubo</h2>
+        </div>
+        <div
+          className="rcx-cf__stage"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
+        >
+          <button className="rcx-cf__nav prev" type="button" onClick={() => go(active - 1)} aria-label="Anterior">
+            <ChevLeft />
+          </button>
+          <div className="rcx-cf__cards">
+            {COVERFLOW_CUBES.map((c, i) => {
+              let offset = i - active;
+              const half = Math.floor(total / 2);
+              if (offset > half)  offset -= total;
+              if (offset < -half) offset += total;
+              return (
+                <button
+                  key={c.name}
+                  className={"rcx-cf-card" + (i === active ? " is-active" : "")}
+                  style={getCardStyle(offset)}
+                  type="button"
+                  aria-label={c.name}
+                  onClick={() => { if (i === active) openLb(i); else go(i); }}
+                >
+                  <div className="rcx-cf-card__inner">
+                    <img src={c.cover} alt={"Cubo diorama " + c.name} loading={i > 2 ? "lazy" : undefined} />
+                    <span className="rcx-cf-card__dim" />
+                    {c.shots.length > 1 && (
+                      <span className="rcx-cf-card__shots">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+                        </svg>
+                        +{c.shots.length - 1}
+                      </span>
+                    )}
+                    <span className="rcx-cf-card__meta">
+                      <span className="rcx-cf-card__name">{c.name}</span>
+                      <span className="rcx-cf-card__cat">{c.cat}</span>
+                    </span>
+                  </div>
+                  <div className="rcx-cf-card__refl">
+                    <img src={c.cover} alt="" aria-hidden="true" />
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          <button className="rcx-cf__nav next" type="button" onClick={() => go(active + 1)} aria-label="Siguiente">
+            <ChevRight />
+          </button>
+        </div>
+        <div className="rcx-cf__start"><span>▶ Press start</span></div>
+        <div className="rcx-cf__dots">
+          {COVERFLOW_CUBES.map((c, i) => (
+            <button key={c.name} className={"rcx-cfdot" + (i === active ? " on" : "")} type="button" onClick={() => go(i)} aria-label={"Ir a " + c.name} />
+          ))}
+        </div>
+      </section>
+
+      {lb && (
+        <div className="rcx-lb" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) closeLb(); }}>
+          <div className="rcx-lb__bar">
+            <div>
+              <div className="rcx-lb__title">{activeCube.name}</div>
+              <div className="rcx-lb__cat">{activeCube.cat}</div>
+            </div>
+            <button className="rcx-lb__close" type="button" onClick={closeLb} aria-label="Cerrar"><XIcon /></button>
+          </div>
+          <div className="rcx-lb__stage" onClick={(e) => { if (e.target === e.currentTarget) closeLb(); }}>
+            {!singleShot && <button className="rcx-lb__nav prev" type="button" onClick={() => lbGo(-1)} aria-label="Anterior"><ChevLeft /></button>}
+            <img key={lb.cubeIdx + "-" + lb.imgIdx} className="rcx-lb__img" src={activeCube.shots[lb.imgIdx]} alt={activeCube.name} />
+            {!singleShot && <button className="rcx-lb__nav next" type="button" onClick={() => lbGo(1)} aria-label="Siguiente"><ChevRight /></button>}
+          </div>
+          {!singleShot && (
+            <div className="rcx-lb__foot">
+              <div className="rcx-lb__dots">
+                {activeCube.shots.map((_, i) => (
+                  <button key={i} type="button" className={"rcx-lb__dot" + (i === lb.imgIdx ? " on" : "")} onClick={() => setLb(l => ({ ...l, imgIdx: i }))} />
+                ))}
+              </div>
+              <div className="rcx-lb__counter">
+                <b>{String(lb.imgIdx + 1).padStart(2, "0")}</b> / {String(activeCube.shots.length).padStart(2, "0")}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+/* ---------- PRODUCT GALLERY LIGHTBOX ---------- */
+function ProductGallery({ product, onClose }) {
+  const [idx, setIdx] = React.useState(0);
+  const shots = product.shots || [product.img];
+  const single = shots.length <= 1;
+
+  React.useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (!single) {
+        if (e.key === "ArrowLeft")  setIdx(i => (i - 1 + shots.length) % shots.length);
+        if (e.key === "ArrowRight") setIdx(i => (i + 1) % shots.length);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
+  }, [single, shots.length, onClose]);
+
+  const ChevLeft  = () => React.createElement("svg", { width:22,height:22,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round" }, React.createElement("path",{d:"m15 18-6-6 6-6"}));
+  const ChevRight = () => React.createElement("svg", { width:22,height:22,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round" }, React.createElement("path",{d:"m9 18 6-6-6-6"}));
+  const XIcon     = () => React.createElement("svg", { width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round" }, React.createElement("path",{d:"M18 6 6 18M6 6l12 12"}));
+
+  return (
+    <div className="rcx-lb" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="rcx-lb__bar">
+        <div>
+          <div className="rcx-lb__title">{product.name}</div>
+          <div className="rcx-lb__cat">{product.cat}</div>
+        </div>
+        <button className="rcx-lb__close" type="button" onClick={onClose} aria-label="Cerrar"><XIcon /></button>
+      </div>
+      <div className="rcx-lb__stage" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+        {!single && <button className="rcx-lb__nav prev" type="button" onClick={() => setIdx(i => (i - 1 + shots.length) % shots.length)} aria-label="Anterior"><ChevLeft /></button>}
+        <img key={idx} className="rcx-lb__img" src={shots[idx]} alt={product.name} />
+        {!single && <button className="rcx-lb__nav next" type="button" onClick={() => setIdx(i => (i + 1) % shots.length)} aria-label="Siguiente"><ChevRight /></button>}
+      </div>
+      {!single && (
+        <div className="rcx-lb__foot">
+          <div className="rcx-lb__dots">
+            {shots.map((_, i) => (
+              <button key={i} type="button" className={"rcx-lb__dot" + (i === idx ? " on" : "")} onClick={() => setIdx(i)} />
+            ))}
+          </div>
+          <div className="rcx-lb__counter">
+            <b>{String(idx + 1).padStart(2, "0")}</b> / {String(shots.length).padStart(2, "0")}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------- FEATURED ---------- */
-function LProductCard({ p, onAdd }) {
+const CF_FEATURED_IDS = new Set(["rcx-001", "rcx-002", "rcx-003", "rcx-007", "rcx-008"]);
+
+function LProductCard({ p, onAdd, onGallery }) {
   const out = p.stock === 0;
   return (
     <div className="pcard">
-      <div className="top">
+      <div
+        className="top"
+        onClick={() => onGallery && p.shots && onGallery(p)}
+        style={p.shots ? { cursor: "pointer" } : undefined}
+        role={p.shots ? "button" : undefined}
+        aria-label={p.shots ? "Ver galería de " + p.name : undefined}
+      >
         {p.badge && <Badge kind={p.badge}>{p.badge === "sale" ? "-25%" : "Nuevo"}</Badge>}
         {out && <span className="badge badge-out" style={{ position: "absolute", top: 12, left: 12, zIndex: 2 }}>Game Over</span>}
         {p.img
           ? <img src={p.img} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
           : <CubeScene hue={p.hue} size={104} scene={p.scene} />}
+        {p.shots && p.shots.length > 1 && (
+          <span className="rcx-cf-card__shots" style={{ opacity: 1, transform: "none" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
+            </svg>
+            +{p.shots.length - 1}
+          </span>
+        )}
       </div>
       <div className="body">
-        <h3 className="rcx-h4" style={{ fontSize: 18 }}>{p.name}</h3>
-        <span className="rcx-small">{p.cat}{p.limited ? " · Edición limitada" : ""}</span>
+        <span className="pcard-cat" style={{ fontSize: 12 }}>{p.cat}{p.limited ? " · Edición limitada" : ""}</span>
+        <h3 className="rcx-h4" style={{ fontSize: 20 }}>{p.name}</h3>
         <div className="price-row">
           <span>
             {p.old && <span className="price old">{p.old} €</span>}
-            <span className="price">{p.price} €</span>
+            <span className="price" style={{ fontSize: 20 }}>{p.price} €</span>
           </span>
           {out && <span className="stock" style={{ color: "var(--rcx-danger)" }}>Agotado</span>}
         </div>
-        <Button variant={out ? "dark" : "primary"} className="btn-block" disabled={out}
-          style={{ marginTop: 14, fontSize: 13, padding: "11px 18px" }} icon={out ? null : "Plus"}
-          onClick={() => { if (!out) onAdd(p); }}>
-          {out ? "Avísame" : "Lo quiero"}
+        <Button variant={out ? "dark" : "ghost"} className="btn-block"
+          style={{ marginTop: 14, fontSize: 13, padding: "11px 18px" }}
+          onClick={() => {
+            const subject = out
+              ? `Lista de espera: ${p.name}`
+              : `Quiero pedir el cubo de ${p.name}`;
+            const body = out
+              ? `Hola RetrocubeX, quiero apuntarme a la lista de espera para el cubo de ${p.name}.`
+              : `Hola RetrocubeX, quiero un cubo de ${p.name}.`;
+            window.location.href = `mailto:retrocubex@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          }}>
+          {out ? "Avísame" : "Pedir cubo"}
         </Button>
       </div>
     </div>
   );
 }
 
-const FEATURED_INITIAL = 5;
-
 function Featured({ onAdd }) {
-  const visible = L_PRODUCTS;
+  const [showAll, setShowAll] = React.useState(false);
+  const [gallery, setGallery] = React.useState(null);
+  const rest = L_PRODUCTS.filter(p => !CF_FEATURED_IDS.has(p.id));
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+  const MOBILE_LIMIT = 4;
+  const limited = !showAll && isMobile;
+  const visible = limited ? rest.slice(0, MOBILE_LIMIT) : rest;
+  const hasMore = limited && rest.length > MOBILE_LIMIT;
 
   return (
     <section id="catalogo" className="section wrap sec-pad">
       <div className="sec-head reveal">
         <div>
-          <span className="rcx-eyebrow">Galería</span>
-          <h2 className="rcx-h1 sec-title">Entra al mundo RetrocubeX</h2>
+          <span className="rcx-eyebrow">Catálogo</span>
+          <h2 className="rcx-h1 sec-title">Todos los cubos</h2>
         </div>
+        <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+          Pide el tuyo
+        </a>
       </div>
-      <HScrollWrap>
-        <div className="featured-grid">
-          {visible.map((p, i) => (
-            <div className={"reveal reveal-d" + ((i % 3) + 1)} key={p.id}>
-              <LProductCard p={p} onAdd={onAdd} />
-            </div>
-          ))}
+      <div className="featured-grid">
+        {visible.map((p, i) => (
+          <div className={"reveal reveal-d" + ((i % 3) + 1)} key={p.id}>
+            <LProductCard p={p} onAdd={onAdd} onGallery={setGallery} />
+          </div>
+        ))}
+      </div>
+      {hasMore && (
+        <div className="load-more-wrap">
+          <button className="btn btn-ghost" onClick={() => setShowAll(true)}>
+            Ver todos los cubos
+          </button>
         </div>
-      </HScrollWrap>
+      )}
+      {gallery && <ProductGallery product={gallery} onClose={() => setGallery(null)} />}
     </section>
   );
 }
@@ -210,7 +486,7 @@ function HowMade() {
     ["01", "Elige tu escena", "Más de 30 dioramas de juegos y pelis de culto. O cuéntanos tu idea para una pieza única."],
     ["02", "Lo montamos a mano", "Recortamos, pintamos y ensamblamos en un cubo de metacrilato. Sin atajos."],
     ["03", "Control de calidad", "Cada cubo pasa su “test de arranque” antes de salir. Numerado y firmado."],
-    ["04", "Llega en 24-48h", "Embalaje anti-golpes tipo cartucho."],
+    ["04", "Encargos personalizados", "¿Tienes un juego en mente? Lo diseñamos a medida, solo para ti."],
   ];
   return (
     <section id="hecho-a-mano" className="section wrap sec-pad">
@@ -252,7 +528,7 @@ function CustomBand() {
     <section id="personaliza" className="customband wrap">
       <div className="customband-inner customband-center reveal">
         <div className="horizon-mini" />
-        <span className="rcx-eyebrow" style={{ color: "var(--rcx-magenta)" }}>Pide tu cubo</span>
+        <span className="rcx-eyebrow">Pide tu cubo</span>
         <h2 className="rcx-h1 sec-title" style={{ marginBottom: 10 }}>¿No ves tu escena?</h2>
         <p className="rcx-lead" style={{ maxWidth: 500, textAlign: "center", margin: "0 auto" }}>
           Pide tu cubo <b style={{ color: "var(--rcx-fg1)" }}>100% personalizado</b>. Tu juego, tu peli, tu momento favorito — lo recreamos en píxel y lo llevamos a la realidad. Una pieza, tuya para siempre.
@@ -270,7 +546,12 @@ function CustomBand() {
 
 /* ---------- REVIEWS ---------- */
 function Stars({ n }) {
-  return <span className="stars">{"★".repeat(n)}<span style={{ color: "var(--rcx-line)" }}>{"★".repeat(5 - n)}</span></span>;
+  return (
+    <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <span className="stars">{"★".repeat(n)}<span style={{ color: "var(--rcx-line)" }}>{"★".repeat(5 - n)}</span></span>
+      <span style={{ fontFamily: "var(--rcx-font-mono)", fontSize: 11, color: "var(--rcx-fg3)", letterSpacing: ".04em" }}>{n}/5</span>
+    </span>
+  );
 }
 function Reviews() {
   return (
@@ -407,4 +688,64 @@ function MobileStickyFooter() {
   );
 }
 
-Object.assign(window, { Nav, Featured, LProductCard, Carousel3D, HowMade, CustomBand, Reviews, Instagram, Newsletter, FooterL, Stars, MobileStickyFooter });
+/* ---------- FAQ ---------- */
+const FAQ_ITEMS = [
+  {
+    q: "¿Qué tamaño tiene el cubo?",
+    a: "8,5 × 8,5 cm de metacrilato transparente. Cabe perfectamente en una estantería, escritorio o vitrina — y queda brutal."
+  },
+  {
+    q: "¿Cómo hago un pedido?",
+    a: "Escríbenos a retrocubex@gmail.com o por Instagram (@retrocubex). Te respondemos en menos de 48h con todos los detalles."
+  },
+  {
+    q: "¿Hacéis diseños personalizados?",
+    a: "Sí, y es lo que más nos gusta. Cuéntanos tu juego, peli o momento favorito y lo recreamos. Cada cubo personalizado es una pieza única, tuya para siempre."
+  },
+  {
+    q: "¿Cuánto tarda en llegar?",
+    a: "El envío es de 24-48h una vez listo el montaje. Los pedidos personalizados pueden tardar unos días más según la complejidad del diseño — te avisamos siempre con antelación."
+  },
+  {
+    q: "¿De qué está hecho?",
+    a: "El diorama se imprime en papel de primera calidad, se recorta y monta a mano pieza a pieza, y se ensambla dentro de un cubo de metacrilato de 8,5 cm. Sin atajos, sin máquinas."
+  },
+  {
+    q: "¿Envíais fuera de España?",
+    a: "De momento trabajamos principalmente en España. Si estás fuera, escríbenos — lo intentamos."
+  },
+];
+
+function FAQ() {
+  const [open, setOpen] = React.useState(null);
+  const toggle = (i) => setOpen(o => o === i ? null : i);
+
+  return (
+    <section id="faq" className="section wrap sec-pad">
+      <div className="reveal" style={{ marginBottom: 40, textAlign: "center" }}>
+        <span className="rcx-eyebrow">¿Tienes dudas?</span>
+        <h2 className="rcx-h1 sec-title">Preguntas frecuentes</h2>
+      </div>
+      <div className="faq-list reveal reveal-d1">
+        {FAQ_ITEMS.map((item, i) => (
+          <div key={i} className={"faq-item" + (open === i ? " faq-item--open" : "")}>
+            <button className="faq-q" type="button" onClick={() => toggle(i)} aria-expanded={open === i}>
+              <span>{item.q}</span>
+              <span className="faq-icon" aria-hidden="true">
+                {open === i
+                  ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M5 12h14"/></svg>
+                  : <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                }
+              </span>
+            </button>
+            <div className="faq-a">
+              <p>{item.a}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { Nav, Featured, LProductCard, Carousel3D, HowMade, CustomBand, Reviews, Instagram, Newsletter, FooterL, Stars, MobileStickyFooter, CoverflowArcade, FAQ });
