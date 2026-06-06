@@ -73,26 +73,6 @@ function Hero({ t }) {
     );
   }
 
-  if (layout === "photo") {
-    return (
-      <section className="hero-section hero-photo">
-        <div className="hero-photo-media">
-          <div className="hero-photo-img" />
-        </div>
-        <div className="hero-photo-veil" />
-        <div className="hero-photo-col">
-          <PressStart />
-          <h1 className="rcx-display hero-h1 hero-photo-title">
-            {t.heroLine1}<br /><span className="holo">{t.heroLine2}</span>
-          </h1>
-          <p className="rcx-lead" dangerouslySetInnerHTML={{ __html: t.heroSub }} />
-          <HeroCTAs t={t} align="left" />
-          <TrustBadges />
-        </div>
-      </section>
-    );
-  }
-
   // default: CENTRADO
   return (
     <section className="hero-section hero-centered">

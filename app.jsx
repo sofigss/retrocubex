@@ -1,7 +1,7 @@
 /* app.jsx — RetrocubeX landing */
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
-  "heroLayout": "centered",
+  "heroLayout": "photo",
   "accent": "#54EEC0",
   "bgTexture": "classic",
   "anim": "full",
@@ -112,7 +112,7 @@ function App() {
       <TweaksPanel>
         <TweakSection label="Hero" />
         <TweakRadio label="Diseño del hero" value={t.heroLayout}
-          options={[{ value: "centered", label: "Centrado" }, { value: "split", label: "Cubo" }, { value: "marquee", label: "Disco" }]}
+          options={[{ value: "photo", label: "Foto" }, { value: "centered", label: "Centrado" }, { value: "split", label: "Cubo" }, { value: "marquee", label: "Disco" }]}
           onChange={(v) => setTweak("heroLayout", v)} />
         <TweakText label="Titular · línea 1" value={t.heroLine1} onChange={(v) => setTweak("heroLine1", v)} />
         <TweakText label="Titular · línea 2" value={t.heroLine2} onChange={(v) => setTweak("heroLine2", v)} />
