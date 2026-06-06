@@ -1019,6 +1019,124 @@ behold-widget { display: block; }
   .rcx-cf__start span { animation: none; }
 }
 
+/* ============================================================
+   PRELOADER — overlay de carga estilo CRT
+   ============================================================ */
+.preloader {
+  position: fixed; inset: 0; z-index: 9000;
+  background: var(--rcx-void);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+.preloader .pl-scan {
+  position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background: repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,0,0,.18) 3px, transparent 4px);
+}
+/* Apagado de tele analógica (CRT power-off) */
+.preloader.tv-off {
+  animation: tvOff .92s cubic-bezier(.5,.16,.3,1) forwards;
+}
+@keyframes tvOff {
+  0%   { transform: scale(1, 1);         background: #100B1C; opacity: 1; }
+  14%  { transform: scale(1.012, 1.006); background: #1a1230; opacity: 1; }
+  44%  { transform: scale(1, 0.013);     background: #dafff4; opacity: 1; }
+  54%  { transform: scale(1, 0.013);     background: #ffffff; opacity: 1; }
+  84%  { transform: scale(0.012, 0.013); background: #ffffff; opacity: 1; }
+  100% { transform: scale(0.012, 0.013); background: #ffffff; opacity: 0; }
+}
+#pl-inner {
+  display: flex; flex-direction: column; align-items: center;
+  transition: opacity .25s var(--rcx-ease), transform .25s var(--rcx-ease);
+}
+#pl-inner.fade { opacity: 0; transform: translateY(-8px); }
+
+.pl-logo { height: 30px; width: auto; margin-bottom: clamp(40px, 9vh, 84px); opacity: .92; }
+
+.pl-stage {
+  position: relative;
+  width: clamp(240px, 56vw, 440px); height: 64px;
+}
+.pl-walker {
+  position: absolute; bottom: 34px;
+  transform: translateX(-50%);
+  transition: left .12s linear;
+}
+.pl-track {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 18px;
+  background: #1c1330; border: 2px solid var(--rcx-line);
+  box-shadow: 4px 4px 0 0 rgba(0,0,0,.5); overflow: hidden;
+}
+.pl-fill {
+  height: 100%; width: 0; background: var(--rcx-mint);
+  transition: width .12s linear;
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.45), inset 0 -3px 0 var(--rcx-mint-deep);
+}
+.pl-phrase {
+  margin-top: 26px;
+  font-family: var(--rcx-font-mono); font-weight: 700;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--rcx-fg2); min-height: 1.4em;
+}
+.pl-phrase::after {
+  content: "_"; margin-left: 2px; color: var(--rcx-mint);
+  animation: plBlink 1s steps(1) infinite;
+}
+@keyframes plBlink { 0%,49%{ opacity:1 } 50%,100%{ opacity:0 } }
+
+/* Sprite del marciano — dos frames con box-shadow */
+.inv-a, .inv-b {
+  position: absolute; left: 0; top: 0; width: 1px; height: 1px;
+  animation: invFlip .5s steps(1) infinite;
+}
+.inv-b { animation-direction: reverse; }
+@keyframes invFlip { 0%,49%{ opacity:1 } 50%,100%{ opacity:0 } }
+
+/* Bloom de fósforo al cerrar */
+.tv-bloom {
+  position: fixed; left: 50%; top: 50%; width: 64vw; height: 4px;
+  z-index: 9001; transform: translate(-50%,-50%) scaleX(0);
+  transform-origin: center; border-radius: 999px;
+  background: #eafff7;
+  box-shadow: 0 0 26px 10px rgba(214,255,243,.9), 0 0 70px 26px rgba(120,235,205,.45);
+  opacity: 0; pointer-events: none;
+}
+.tv-bloom.flash { animation: bloom .92s cubic-bezier(.5,.16,.3,1) forwards; }
+@keyframes bloom {
+  0%,40% { opacity: 0; transform: translate(-50%,-50%) scaleX(0); }
+  46%    { opacity: 1; transform: translate(-50%,-50%) scaleX(1); }
+  84%    { opacity: 1; transform: translate(-50%,-50%) scaleX(.015); }
+  100%   { opacity: 0; transform: translate(-50%,-50%) scaleX(.015); }
+}
+
+/* La web aparece con fundido al revelarse */
+#root.rcx-reveal { animation: siteIn .6s ease .18s both; }
+@keyframes siteIn {
+  0%   { opacity: 0; transform: scale(1.025); filter: brightness(1.6) saturate(.85); }
+  100% { opacity: 1; transform: scale(1);     filter: none; }
+}
+.preloader.gone { display: none; }
+
+/* Botón "Repetir intro" */
+.pl-replay {
+  position: fixed; right: 18px; bottom: 18px; z-index: 50;
+  display: none; align-items: center; gap: 9px;
+  font-family: var(--rcx-font-arcade); font-size: 10px; color: var(--rcx-mint);
+  cursor: pointer; background: rgba(24,16,39,.85); backdrop-filter: blur(6px);
+  border: 1.5px solid var(--rcx-line); padding: 11px 14px;
+  border-radius: var(--rcx-radius-pill);
+  transition: border-color .2s, box-shadow .2s;
+}
+.pl-replay:hover { border-color: var(--rcx-mint); box-shadow: var(--rcx-glow-mint); }
+.pl-replay.show { display: inline-flex; }
+
+@media (prefers-reduced-motion: reduce) {
+  .inv-a, .inv-b, .pl-phrase::after { animation: none; }
+  .inv-b { opacity: 0; }
+  .preloader.tv-off, #root.rcx-reveal { animation: none; opacity: 1; }
+}
+
 /* ---------- COVERFLOW LIGHTBOX ---------- */
 .rcx-lb {
   position: fixed; inset: 0; z-index: 9999;

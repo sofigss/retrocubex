@@ -22,6 +22,117 @@
   </script>
 </head>
 <body>
+
+  <!-- ===== PRELOADER ===== -->
+  <div class="preloader" id="preloader">
+    <div class="pl-scan"></div>
+    <div id="pl-inner">
+      <img class="pl-logo" src="assets/logo-light.png" alt="RetroCubeX">
+      <div class="pl-stage">
+        <div class="pl-walker" id="pl-walker">
+          <div class="inv-a" id="inv-a"></div>
+          <div class="inv-b" id="inv-b"></div>
+        </div>
+        <div class="pl-track"><div class="pl-fill" id="pl-fill"></div></div>
+      </div>
+      <div class="pl-phrase" id="pl-phrase"></div>
+    </div>
+  </div>
+  <div class="tv-bloom" id="tv-bloom"></div>
+  <button class="pl-replay" id="pl-replay">▶ Repetir intro</button>
+
+  <script>
+  (function(){
+    var PHRASES = [
+      "SOPLANDO EL CARTUCHO…",
+      "REBOBINANDO LA CINTA…",
+      "INSERTANDO MONEDA…",
+      "BUSCANDO UNA VIDA EXTRA…",
+      "DESPERTANDO AL MARCIANO…",
+      "PULIENDO CADA PÍXEL…",
+      "MONTANDO TU DIORAMA…",
+      "ENCENDIENDO LOS LEDS…",
+      "ESQUIVANDO AL JEFE FINAL…",
+      "SINTONIZANDO LA TELE…"
+    ];
+    var DONE_TEXT = "¡LISTO! ▶ PRESS START";
+
+    // Sprite pixel-art (box-shadow)
+    var UNIT = 5, MINT = "#54EEC0";
+    var INV_A = ["..X.....X..","...X...X...","..XXXXXXX..",".XX.XXX.XX.","XXXXXXXXXXX","X.XXXXXXX.X","X.X.....X.X","...XX.XX..."];
+    var INV_B = ["..X.....X..","X..X...X..X","X.XXXXXXX.X","XXX.XXX.XXX","XXXXXXXXXXX",".XXXXXXXXX.","..X.....X..",".X.......X."];
+    function shadow(rows){
+      var s=[];
+      for(var y=0;y<rows.length;y++){var r=rows[y];
+        for(var x=0;x<r.length;x++){if(r[x]!=='.'&&r[x]!==' ')s.push((x*UNIT)+"px "+(y*UNIT)+"px 0 "+MINT);}}
+      return s.join(",");
+    }
+    var walker = document.getElementById('pl-walker');
+    walker.style.width  = (11*UNIT)+"px";
+    walker.style.height = (8*UNIT)+"px";
+    document.getElementById('inv-a').style.boxShadow = shadow(INV_A);
+    document.getElementById('inv-b').style.boxShadow = shadow(INV_B);
+
+    var fill    = document.getElementById('pl-fill');
+    var phraseEl= document.getElementById('pl-phrase');
+    var overlay = document.getElementById('preloader');
+    var inner   = document.getElementById('pl-inner');
+    var bloom   = document.getElementById('tv-bloom');
+    var replay  = document.getElementById('pl-replay');
+
+    var phraseTimer=null, progTimer=null, exited=false;
+
+    function setPct(p){ fill.style.width=p+"%"; walker.style.left=p+"%"; }
+
+    function exit(){
+      if(exited) return; exited=true;
+      clearInterval(progTimer); clearInterval(phraseTimer);
+      setPct(100); phraseEl.textContent=DONE_TEXT;
+      setTimeout(function(){
+        inner.classList.add('fade');
+        setTimeout(function(){
+          overlay.classList.add('tv-off');
+          bloom.classList.add('flash');
+          var root=document.getElementById('root');
+          if(root) root.classList.add('rcx-reveal');
+        },230);
+        setTimeout(function(){
+          overlay.classList.add('gone');
+          replay.classList.add('show');
+        },1160);
+      },400);
+    }
+
+    function run(){
+      exited=false;
+      overlay.classList.remove('gone','tv-off');
+      inner.classList.remove('fade');
+      bloom.classList.remove('flash');
+      var root=document.getElementById('root');
+      if(root) root.classList.remove('rcx-reveal');
+      replay.classList.remove('show');
+      setPct(0);
+      var pi=Math.floor(Math.random()*PHRASES.length);
+      phraseEl.textContent=PHRASES[pi];
+      clearInterval(phraseTimer); clearInterval(progTimer);
+      phraseTimer=setInterval(function(){ pi=(pi+1)%PHRASES.length; phraseEl.textContent=PHRASES[pi]; },1250);
+      var start=performance.now();
+      progTimer=setInterval(function(){
+        var e=performance.now()-start;
+        var lin=e/3400;
+        // Llega hasta el 90% y espera a que React avise
+        if(lin>=0.9){ clearInterval(progTimer); setPct(90); return; }
+        var eased=lin+Math.sin(lin*Math.PI*3)*0.012;
+        setPct(Math.max(0,Math.min(90,Math.floor(eased*100))));
+      },40);
+    }
+
+    replay.addEventListener('click', run);
+    window.__plExit = exit;   // React lo llamará al montar
+    run();
+  })();
+  </script>
+
   <div id="root"></div>
   <script type="text/babel" src="data.jsx"></script>
   <script type="text/babel" src="ui.jsx"></script>

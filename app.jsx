@@ -81,6 +81,9 @@ function App() {
   useReveal([t.heroLayout, t.showFeatured, t.showGallery, t.showHowMade, t.showCustom, t.showReviews, t.showInstagram, t.showNewsletter, t.anim]);
   useHeaderScroll();
 
+  // Dispara el cierre del preloader cuando React haya montado
+  React.useEffect(() => { window.__plExit?.(); }, []);
+
   const acc = ACCENTS[t.accent] || ACCENTS["#54EEC0"];
   const rootStyle = {
     "--rcx-mint": t.accent,
