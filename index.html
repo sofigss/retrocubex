@@ -39,7 +39,6 @@
     </div>
   </div>
   <div class="tv-bloom" id="tv-bloom"></div>
-  <button class="pl-replay" id="pl-replay">▶ Repetir intro</button>
 
   <script>
   (function(){
@@ -78,14 +77,14 @@
     var overlay = document.getElementById('preloader');
     var inner   = document.getElementById('pl-inner');
     var bloom   = document.getElementById('tv-bloom');
-    var replay  = document.getElementById('pl-replay');
 
-    var phraseTimer=null, progTimer=null, exited=false;
+    var phraseTimer=null, progTimer=null, exited=false, runStart=0;
+    var MIN_MS = 5000; // mínimo para leer al menos 4 frases
 
     function setPct(p){ fill.style.width=p+"%"; walker.style.left=p+"%"; }
 
-    function exit(){
-      if(exited) return; exited=true;
+    function doExit(){
+      exited=true;
       clearInterval(progTimer); clearInterval(phraseTimer);
       setPct(100); phraseEl.textContent=DONE_TEXT;
       setTimeout(function(){
@@ -98,9 +97,19 @@
         },230);
         setTimeout(function(){
           overlay.classList.add('gone');
-          replay.classList.add('show');
         },1160);
       },400);
+    }
+
+    function exit(){
+      if(exited) return;
+      var elapsed = performance.now() - runStart;
+      if(elapsed < MIN_MS){
+        // espera el tiempo restante antes de cerrar
+        setTimeout(exit, MIN_MS - elapsed);
+        return;
+      }
+      doExit();
     }
 
     function run(){
@@ -110,24 +119,21 @@
       bloom.classList.remove('flash');
       var root=document.getElementById('root');
       if(root) root.classList.remove('rcx-reveal');
-      replay.classList.remove('show');
       setPct(0);
+      runStart = performance.now();
       var pi=Math.floor(Math.random()*PHRASES.length);
       phraseEl.textContent=PHRASES[pi];
       clearInterval(phraseTimer); clearInterval(progTimer);
       phraseTimer=setInterval(function(){ pi=(pi+1)%PHRASES.length; phraseEl.textContent=PHRASES[pi]; },1250);
-      var start=performance.now();
       progTimer=setInterval(function(){
-        var e=performance.now()-start;
-        var lin=e/3400;
-        // Llega hasta el 90% y espera a que React avise
+        var e=performance.now()-runStart;
+        var lin=e/4500; // bar llega al 90% en ~4.5s
         if(lin>=0.9){ clearInterval(progTimer); setPct(90); return; }
         var eased=lin+Math.sin(lin*Math.PI*3)*0.012;
         setPct(Math.max(0,Math.min(90,Math.floor(eased*100))));
       },40);
     }
 
-    replay.addEventListener('click', run);
     window.__plExit = exit;   // React lo llamará al montar
     run();
   })();
