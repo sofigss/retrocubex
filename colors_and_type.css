@@ -7,8 +7,7 @@
 
 /* ---------- FONTS ---------- */
 /* Funnel Display = brand font (provided). Press Start 2P = arcade
-   accent (LEVEL / SCORE / PRESS START). Space Mono = technical/spec.
-   Press Start 2P + Space Mono load from Google Fonts CDN. */
+   accent (LEVEL / SCORE / PRESS START). */
 @font-face {
   font-family: "Funnel Display";
   src: url("fonts/FunnelDisplay-Light.ttf") format("truetype");
@@ -39,7 +38,7 @@
   src: url("fonts/FunnelDisplay-ExtraBold.ttf") format("truetype");
   font-weight: 800; font-style: normal; font-display: swap;
 }
-@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Mono:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 :root {
   /* ---------- CORE PALETTE ---------- */
@@ -93,7 +92,7 @@
   --rcx-font-display: "Funnel Display", system-ui, sans-serif;
   --rcx-font-body:    "Funnel Display", system-ui, sans-serif;
   --rcx-font-arcade:  "Press Start 2P", "Funnel Display", monospace;
-  --rcx-font-mono:    "Space Mono", ui-monospace, monospace;
+  --rcx-font-mono:    "Funnel Display", system-ui, sans-serif;
 
   /* ---------- TYPE SCALE ---------- */
   --rcx-text-xs:  12px;
