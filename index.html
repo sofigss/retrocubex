@@ -93,7 +93,20 @@
           overlay.classList.add('tv-off');
           bloom.classList.add('flash');
           var root=document.getElementById('root');
-          if(root) root.classList.add('rcx-reveal');
+          if(root){
+            root.classList.add('rcx-reveal');
+            // Importante: quitar la clase al terminar el revelado.
+            // Si se queda, el transform/filter de #root lo convierte en
+            // bloque contenedor de los position:fixed (Safari/WebKit) y el
+            // lightbox aparece descolocado (solo se ve el overlay oscuro).
+            var clearReveal=function(e){
+              if(e && e.target!==root) return; // ignora animaciones de hijos
+              root.removeEventListener('animationend', clearReveal);
+              root.classList.remove('rcx-reveal');
+            };
+            root.addEventListener('animationend', clearReveal);
+            setTimeout(clearReveal, 1200); // fallback por si no dispara animationend
+          }
         },230);
         setTimeout(function(){
           overlay.classList.add('gone');

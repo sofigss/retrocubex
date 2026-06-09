@@ -249,7 +249,7 @@ function ProductGallery({ product, onClose }) {
   const ChevRight = () => React.createElement("svg", { width:22,height:22,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round" }, React.createElement("path",{d:"m9 18 6-6-6-6"}));
   const XIcon     = () => React.createElement("svg", { width:20,height:20,viewBox:"0 0 24 24",fill:"none",stroke:"currentColor",strokeWidth:2,strokeLinecap:"round" }, React.createElement("path",{d:"M18 6 6 18M6 6l12 12"}));
 
-  return (
+  return ReactDOM.createPortal(
     <div className="rcx-lb" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="rcx-lb__bar">
         <div>
@@ -275,7 +275,8 @@ function ProductGallery({ product, onClose }) {
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 
@@ -684,19 +685,25 @@ function MobileStickyFooter() {
     let lastY = window.scrollY;
     const onScroll = () => {
       const y = window.scrollY;
-      setVisible(y > 350 && y > lastY);
+      // Cerca del top: siempre oculto. Si no, mostrar al bajar y ocultar
+      // al subir, con un umbral para evitar parpadeos al soltar el dedo.
+      if (y <= 350) setVisible(false);
+      else if (y < lastY - 6) setVisible(false);   // scroll claro hacia arriba
+      else if (y > lastY + 6) setVisible(true);     // scroll claro hacia abajo
       lastY = y;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  return (
+  return ReactDOM.createPortal(
     <div className={"mobile-sticky-cta" + (visible ? " mobile-sticky-cta--in" : "")}>
       <a href={TYPEFORM_URL} target="_blank" rel="noopener noreferrer" className="btn btn-primary pulse mobile-sticky-btn">
         Pide tu cubo
       </a>
-    </div>
+    </div>,
+    document.body
   );
 }
 
