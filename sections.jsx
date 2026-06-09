@@ -194,7 +194,7 @@ function CoverflowArcade() {
         </div>
       </section>
 
-      {lb && (
+      {lb && ReactDOM.createPortal(
         <div className="rcx-lb" role="dialog" aria-modal="true" onClick={(e) => { if (e.target === e.currentTarget) closeLb(); }}>
           <div className="rcx-lb__bar">
             <div>
@@ -220,7 +220,8 @@ function CoverflowArcade() {
               </div>
             </div>
           )}
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
@@ -687,9 +688,7 @@ function MobileStickyFooter() {
       const y = window.scrollY;
       // Cerca del top: siempre oculto. Si no, mostrar al bajar y ocultar
       // al subir, con un umbral para evitar parpadeos al soltar el dedo.
-      if (y <= 350) setVisible(false);
-      else if (y < lastY - 6) setVisible(false);   // scroll claro hacia arriba
-      else if (y > lastY + 6) setVisible(true);     // scroll claro hacia abajo
+      setVisible(y > 350);
       lastY = y;
     };
     window.addEventListener("scroll", onScroll, { passive: true });
