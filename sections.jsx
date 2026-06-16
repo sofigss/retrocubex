@@ -284,30 +284,72 @@ function ProductGallery({ product, onClose }) {
 /* ---------- FEATURED ---------- */
 const CF_FEATURED_IDS = new Set(["rcx-001", "rcx-002", "rcx-003", "rcx-007", "rcx-008"]);
 
+function CardCarousel({ shots, alt, onOpen }) {
+  const trackRef = React.useRef(null);
+  const [idx, setIdx] = React.useState(0);
+  const n = shots.length;
+
+  const goTo = (i) => {
+    const t = trackRef.current;
+    if (!t) return;
+    const clamped = Math.max(0, Math.min(n - 1, i));
+    t.scrollTo({ left: clamped * t.clientWidth, behavior: "smooth" });
+  };
+
+  const onScroll = () => {
+    const t = trackRef.current;
+    if (!t) return;
+    const i = Math.round(t.scrollLeft / t.clientWidth);
+    setIdx((prev) => (i !== prev ? i : prev));
+  };
+
+  const Chev = (dir) => React.createElement("svg",
+    { width: 18, height: 18, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2.4, strokeLinecap: "round", strokeLinejoin: "round" },
+    React.createElement("path", { d: dir === "prev" ? "m15 18-6-6 6-6" : "m9 18 6-6-6-6" }));
+
+  return (
+    <div className="pcard-carousel">
+      <div className="pcard-track" ref={trackRef} onScroll={onScroll}>
+        {shots.map((src, i) => (
+          <div className="pcard-slide" key={i} onClick={() => onOpen && onOpen()}
+            role="button" aria-label={"Ampliar " + alt}>
+            <img src={src} alt={alt + " — vista " + (i + 1)} loading="lazy"
+              style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
+          </div>
+        ))}
+      </div>
+      <button className="pcard-arrow prev" type="button" aria-label="Imagen anterior"
+        onClick={(e) => { e.stopPropagation(); goTo(idx - 1); }} disabled={idx === 0}>{Chev("prev")}</button>
+      <button className="pcard-arrow next" type="button" aria-label="Imagen siguiente"
+        onClick={(e) => { e.stopPropagation(); goTo(idx + 1); }} disabled={idx === n - 1}>{Chev("next")}</button>
+      <div className="pcard-dots" aria-hidden="true">
+        {shots.map((_, i) => (
+          <button key={i} type="button" tabIndex={-1} className={"pcard-dot" + (i === idx ? " on" : "")}
+            aria-label={"Ir a la imagen " + (i + 1)}
+            onClick={(e) => { e.stopPropagation(); goTo(i); }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function LProductCard({ p, onAdd, onGallery }) {
   const out = p.stock === 0;
+  const shots = (p.shots && p.shots.length) ? p.shots : (p.img ? [p.img] : []);
+  const hasCarousel = shots.length > 1;
+  const openGallery = () => onGallery && shots.length && onGallery(p);
   return (
     <div className="pcard">
-      <div
-        className="top"
-        onClick={() => onGallery && p.shots && onGallery(p)}
-        style={p.shots ? { cursor: "pointer" } : undefined}
-        role={p.shots ? "button" : undefined}
-        aria-label={p.shots ? "Ver galería de " + p.name : undefined}
-      >
+      <div className="top">
         {p.badge && <Badge kind={p.badge}>{p.badge === "sale" ? "-25%" : "Nuevo"}</Badge>}
-        {out && <span className="badge badge-out" style={{ position: "absolute", top: 12, left: 12, zIndex: 2 }}>Game Over</span>}
-        {p.img
-          ? <img src={p.img} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
+        {out && <span className="badge badge-out" style={{ position: "absolute", top: 12, left: 12, zIndex: 3 }}>Game Over</span>}
+        {shots.length
+          ? (hasCarousel
+              ? <CardCarousel shots={shots} alt={p.name} onOpen={openGallery} />
+              : <div className="pcard-slide" onClick={openGallery} role="button" aria-label={"Ampliar " + p.name} style={{ cursor: "zoom-in", position: "absolute", inset: 0 }}>
+                  <img src={shots[0]} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", display: "block" }} />
+                </div>)
           : <CubeScene hue={p.hue} size={104} scene={p.scene} />}
-        {p.shots && p.shots.length > 1 && (
-          <span className="rcx-cf-card__shots" style={{ opacity: 1, transform: "none" }}>
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-            </svg>
-            +{p.shots.length - 1}
-          </span>
-        )}
       </div>
       <div className="body">
         <span className="pcard-cat" style={{ fontSize: 12 }}>{p.cat}{p.limited ? " · Edición limitada" : ""}</span>
