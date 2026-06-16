@@ -1,7 +1,7 @@
 /* sections.jsx — RetrocubeX landing */
 
 const WALLAPOP_URL = "https://es.wallapop.com/app/search?keywords=retrocubex";
-const VINTED_URL   = "https://www.vinted.es/";
+const VINTED_URL   = "https://www.vinted.es/member/62200263";
 
 /* ---------- NAV ---------- */
 function Nav() {
@@ -492,10 +492,10 @@ function Carousel3D() {
 /* ---------- HOW IT'S MADE ---------- */
 function HowMade() {
   const steps = [
-    ["01", "Elige tu escena", "Más de 30 dioramas de juegos y pelis de culto. O cuéntanos tu idea para una pieza única."],
+    ["01", "Elige tu escena", "Dinos tu película, tu videojuego favorito o idea y te comunicaremos cómo podremos llevarla a cabo."],
     ["02", "Lo montamos a mano", "Recortamos, pintamos y ensamblamos en un cubo de metacrilato. Sin atajos."],
     ["03", "Control de calidad", "Cada cubo pasa su “test de arranque” antes de salir. Numerado y firmado."],
-    ["04", "Encargos personalizados", "¿Tienes un juego en mente? Lo diseñamos a medida, solo para ti."],
+    ["04", "Tras el envío...¡tendrás tu cubex!", "Ya podrás disfrutar de tu nuevo recuerdo en 3D."],
   ];
   return (
     <section id="hecho-a-mano" className="section wrap sec-pad">
@@ -570,13 +570,12 @@ function Reviews() {
         <h2 className="rcx-h1 sec-title">Lo que dicen de nosotras</h2>
       </div>
       <div className="score-strip reveal">
-        {[["4,9", "sobre 5 estrellas"], ["98%", "lo recomiendan"], ["95%", "clientes satisfechos"], ["100%", "mejora de decoración retro"]].map(([num, lbl]) => (
+        {[["5/5", "estrellas"], ["98%", "lo recomiendan"], ["100%", "clientes satisfechos"]].map(([num, lbl]) => (
           <div key={lbl} className="score-item">
             <span className="num">{num}</span>
             <span className="rcx-small score-lbl">{lbl}</span>
           </div>
         ))}
-        <span className="stars score-stars" style={{ fontSize: 20 }}>★★★★★</span>
       </div>
       <HScrollWrap>
         <div className="reviews-grid">
@@ -722,7 +721,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "¿Cuánto tarda en llegar?",
-    a: "El envío es de 24-48h una vez listo el montaje. Los pedidos personalizados pueden tardar unos días más según la complejidad del diseño — te avisamos siempre con antelación."
+    a: "El envío se realiza desde Vinted o Wallapop, y se deja en el punto de envío tras haber pasado nuestras pruebas de calidad. Los envíos suelen tardar entre 4-5 días hábiles en llegar Los pedidos personalizados pueden tardar unos días más según la complejidad del diseño — te avisamos siempre con antelación."
   },
   {
     q: "¿De qué está hecho?",
@@ -730,7 +729,7 @@ const FAQ_ITEMS = [
   },
   {
     q: "¿Envíais fuera de España?",
-    a: "De momento trabajamos principalmente en España. Si estás fuera, escríbenos — lo intentamos."
+    a: "¡Sí! En los sitios que cubre Wallapop y Vinted. Si estás fuera, escríbenos, lo intentamos."
   },
 ];
 
