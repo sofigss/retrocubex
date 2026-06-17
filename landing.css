@@ -617,6 +617,105 @@ behold-widget { display: block; }
 .hd-link { transition: color .15s var(--rcx-ease); }
 .pcard .top { transition: box-shadow .3s var(--rcx-ease); }
 
+/* ---------- IN-CARD IMAGE CAROUSEL ---------- */
+.pcard-carousel { position: absolute; inset: 0; top: 0; right: 0; bottom: 0; left: 0; width: 100%; height: 100%; }
+.pcard-track {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x;
+}
+.pcard-track::-webkit-scrollbar { display: none; }
+.pcard-track .pcard-slide {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  /* Cada slide es un cuadrado por sí mismo. Si la cadena de alturas
+     (aspect-ratio → carousel → track → slide) no resuelve en algún
+     navegador móvil, este aspect-ratio evita que la imagen se muestre
+     a tamaño natural y que los slides se apilen en vertical. */
+  position: relative;
+  aspect-ratio: 1 / 1;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  cursor: zoom-in;
+}
+/* La imagen rellena el slide aunque el height:100% en línea no resuelva. */
+.pcard-track .pcard-slide img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+/* arrows — hidden until hover (desktop), hidden entirely on touch devices */
+.pcard-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 4;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 999px;
+  background: rgba(12, 14, 18, .55);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  backdrop-filter: blur(4px);
+  transition: opacity .18s var(--rcx-ease), background .18s var(--rcx-ease), box-shadow .18s var(--rcx-ease);
+}
+.pcard-arrow.prev { left: 10px; }
+.pcard-arrow.next { right: 10px; }
+.pcard .top:hover .pcard-arrow { opacity: 1; }
+.pcard-arrow:hover { background: var(--rcx-mint); color: var(--rcx-fg-on-mint); box-shadow: 0 0 16px -3px var(--rcx-mint); }
+.pcard-arrow:disabled { opacity: 0 !important; pointer-events: none; }
+/* dots */
+.pcard-dots {
+  position: absolute;
+  left: 0; right: 0; bottom: 10px;
+  z-index: 4;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  pointer-events: none;
+}
+.pcard-dot {
+  pointer-events: auto;
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .5);
+  box-shadow: 0 0 4px rgba(0, 0, 0, .4);
+  cursor: pointer;
+  transition: width .2s var(--rcx-ease), background .2s var(--rcx-ease);
+}
+.pcard-dot.on { width: 16px; background: var(--rcx-mint); }
+/* touch devices: no hover arrows, rely on swipe + dots */
+@media (hover: none) {
+  .pcard-arrow { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pcard-track { scroll-behavior: auto; }
+}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 880px) {
   .hero-split .hero-grid { grid-template-columns: 1fr; gap: 36px; }

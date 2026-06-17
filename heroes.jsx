@@ -7,7 +7,7 @@ function PressStart({ children = "▸ PRESS START" }) {
 function TrustBadges() {
   return (
     <div className="hero-trust">
-      {[["Package", "Envío 24-48h"], ["Hand", "Hecho a mano"], ["Diamond", "Calidad premium"], ["ShieldCheck", "Edición numerada"]].map(([ic, txt]) => (
+      {[["Package", "Cubos personalizados"], ["Hand", "Hecho a mano"], ["Diamond", "Calidad premium"], ["ShieldCheck", "Edición numerada"]].map(([ic, txt]) => (
         <span key={txt}><Icon name={ic} size={15} color="var(--rcx-mint)" /> {txt}</span>
       ))}
     </div>
