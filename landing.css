@@ -632,7 +632,10 @@ behold-widget { display: block; }
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   overscroll-behavior-x: contain;
-  touch-action: pan-x;
+  /* pan-x SOLO permitía arrastre horizontal y bloqueaba el scroll vertical
+     de la página al tocar la imagen en móvil. Con "pan-x pan-y" el gesto
+     horizontal lo consume el carrusel y el vertical sube a la página. */
+  touch-action: pan-x pan-y;
 }
 .pcard-track::-webkit-scrollbar { display: none; }
 .pcard-track .pcard-slide {

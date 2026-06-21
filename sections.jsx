@@ -609,7 +609,7 @@ function Reviews() {
     <section id="opiniones" className="section wrap sec-pad">
       <div className="reveal" style={{ marginBottom: 28 }}>
         <span className="rcx-eyebrow">High scores</span>
-        <h2 className="rcx-h1 sec-title">Lo que dicen de nosotras</h2>
+        <h2 className="rcx-h1 sec-title">Lo que dicen nuestros clientes</h2>
       </div>
       <div className="score-strip reveal">
         {[["5/5", "estrellas"], ["98%", "lo recomiendan"], ["100%", "clientes satisfechos"]].map(([num, lbl]) => (
